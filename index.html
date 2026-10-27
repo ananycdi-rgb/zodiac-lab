@@ -1478,18 +1478,24 @@
 
     .pair-person {
       position: relative;
-      overflow: hidden;
-      padding: 15px 17px 14px;
+      overflow: visible;
+      padding: 14px;
       border: 1px solid var(--line);
       border-radius: 18px;
       background: var(--surface-soft);
       transition: border-color 180ms ease, background 180ms ease;
     }
 
+    .pair-person.menu-open {
+      z-index: 30;
+      border-color: rgba(36, 115, 90, 0.28);
+      background: var(--surface);
+    }
+
     .pair-person::before {
       position: absolute;
-      top: 14px;
-      bottom: 14px;
+      top: 13px;
+      bottom: 13px;
       left: 0;
       width: 3px;
       border-radius: 0 3px 3px 0;
@@ -1548,75 +1554,270 @@
       font-weight: 700;
     }
 
-    .pair-person-main {
+    .pair-picker {
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .pair-trigger {
       display: flex;
+      width: 100%;
       align-items: center;
-      gap: 13px;
-      margin-top: 11px;
+      gap: 11px;
+      padding: 8px 9px 8px 8px;
+      border: 1px solid rgba(216, 207, 192, 0.74);
+      border-radius: 14px;
+      color: var(--ink);
+      background: var(--surface);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .pair-trigger:hover {
+      border-color: var(--line-strong);
+      box-shadow: 0 6px 16px rgba(47, 43, 31, 0.045);
+    }
+
+    .pair-trigger[aria-expanded="true"] {
+      border-color: rgba(36, 115, 90, 0.38);
+      box-shadow: 0 0 0 3px rgba(36, 115, 90, 0.07);
+    }
+
+    .pair-trigger-copy {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .pair-name {
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 760;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .pair-glyph {
       display: grid;
       flex: 0 0 auto;
-      width: 46px;
-      height: 46px;
+      width: 42px;
+      height: 42px;
       place-items: center;
       border: 1px solid color-mix(in srgb, var(--pair-sign-color) 28%, transparent);
       border-radius: 50%;
       color: var(--pair-sign-color);
       background: color-mix(in srgb, var(--pair-sign-color) 9%, white);
       font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
-      font-size: 25px;
+      font-size: 23px;
       line-height: 1;
       transition: color 240ms ease, border-color 240ms ease, background 240ms ease;
     }
 
-    .pair-select-wrap {
-      position: relative;
-      flex: 1;
-      min-width: 0;
-      padding-right: 22px;
-    }
-
-    .pair-select {
-      width: 100%;
-      padding: 0;
-      border: 0;
-      appearance: none;
-      color: var(--ink);
-      background: transparent;
-      font-size: 22px;
-      font-weight: 760;
-      line-height: 1.2;
-      letter-spacing: -0.025em;
-      cursor: pointer;
-    }
-
-    .pair-select:focus {
-      outline: none;
-    }
-
-    .pair-select-wrap:focus-within .pair-select {
-      color: var(--accent-deep);
-    }
-
-    .pair-caret {
-      position: absolute;
-      top: 50%;
-      right: 2px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1;
-      pointer-events: none;
-      transform: translateY(-58%);
-    }
-
     .pair-meta {
-      margin: 4px 0 0;
+      display: block;
+      overflow: hidden;
+      margin: 0;
       color: var(--muted);
       font-size: 10.5px;
-      line-height: 1.45;
+      line-height: 1.4;
       letter-spacing: 0.02em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pair-trigger-caret {
+      display: grid;
+      flex: 0 0 auto;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--muted);
+      background: var(--surface-soft);
+      transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .pair-trigger-caret svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .pair-trigger[aria-expanded="true"] .pair-trigger-caret {
+      border-color: rgba(36, 115, 90, 0.3);
+      color: var(--accent-deep);
+      transform: rotate(180deg);
+    }
+
+    .sign-menu {
+      position: absolute;
+      top: calc(100% + 7px);
+      left: 0;
+      z-index: 40;
+      width: min(100%, 430px);
+      max-height: min(340px, 52vh);
+      padding: 9px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 22px 55px rgba(47, 43, 31, 0.16);
+      scrollbar-color: var(--line-strong) transparent;
+      scrollbar-width: thin;
+      animation: signMenuIn 160ms ease both;
+    }
+
+    #pairMenuB {
+      right: 0;
+      left: auto;
+    }
+
+    .sign-menu.is-up {
+      top: auto;
+      bottom: calc(100% + 7px);
+      transform-origin: bottom center;
+      animation-name: signMenuInUp;
+    }
+
+    .sign-menu::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sign-menu::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: var(--line-strong);
+    }
+
+    @keyframes signMenuIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes signMenuInUp {
+      from {
+        opacity: 0;
+        transform: translateY(5px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .sign-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 2px 4px 8px;
+      color: var(--muted);
+      font-size: 9.5px;
+      letter-spacing: 0.04em;
+    }
+
+    .sign-menu-head span:first-child {
+      font-family: var(--num-font);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+
+    .sign-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+    }
+
+    .sign-option {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      padding: 7px 7px 6px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      color: var(--ink-soft);
+      background: transparent;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+
+    .sign-option:hover {
+      border-color: var(--line);
+      background: var(--surface-soft);
+    }
+
+    .sign-option:focus-visible {
+      outline: none;
+      border-color: var(--line-strong);
+      background: var(--surface-soft);
+      box-shadow: 0 0 0 2px rgba(36, 115, 90, 0.11);
+    }
+
+    .sign-option[aria-selected="true"] {
+      border-color: color-mix(in srgb, var(--sign-color) 36%, transparent);
+      color: var(--ink);
+      background: color-mix(in srgb, var(--sign-color) 9%, white);
+    }
+
+    .sign-option[aria-selected="true"]::after {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--sign-color);
+      content: "";
+    }
+
+    .sign-option-top {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+      padding-right: 7px;
+    }
+
+    .sign-option-glyph {
+      flex: 0 0 auto;
+      color: var(--sign-color);
+      font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .sign-option-name {
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sign-option-meta {
+      padding-left: 19px;
+      color: var(--muted);
+      font-size: 8px;
+      line-height: 1.3;
     }
 
     .pair-connector {
@@ -2156,10 +2357,10 @@
 
     @media (max-width: 380px) {
       .pair-person {
-        padding: 14px;
+        padding: 12px;
       }
 
-      .pair-select {
+      .pair-name {
         font-size: 20px;
       }
 
@@ -2169,6 +2370,18 @@
 
       .pair-gender button {
         padding: 3px 7px;
+      }
+
+      .sign-menu {
+        padding: 7px;
+      }
+
+      .sign-menu-grid {
+        gap: 3px;
+      }
+
+      .sign-option {
+        padding: 6px 6px 5px;
       }
     }
 
@@ -2185,8 +2398,15 @@
       .pair-best-card,
       .pair-person,
       .pair-glyph,
-      .pair-person::before {
+      .pair-person::before,
+      .pair-trigger,
+      .pair-trigger-caret,
+      .sign-option {
         transition: none;
+      }
+
+      .sign-menu {
+        animation: none;
       }
 
       .custom-panel {
@@ -2364,7 +2584,7 @@
           <div class="pair-model">
             <span>HOW IT WORKS</span>
             <strong>36 维度 × 四元素 × 相位</strong>
-            <p>选择星座即时重算契合度；选择称呼会切换文案视角，不改变星象契合分。</p>
+            <p>选择星座即时重算契合度，称呼会切换文案视角。结果由性格原型推演，并非统计调查。</p>
           </div>
         </div>
 
@@ -2378,13 +2598,25 @@
                 <button type="button" data-gender="any" aria-pressed="false">不限</button>
               </div>
             </div>
-            <div class="pair-person-main">
-              <span class="pair-glyph" id="pairGlyphA" aria-hidden="true">♋</span>
-              <div class="pair-select-wrap">
-                <label class="sr-only" for="pairSignA">主角 A 的星座</label>
-                <select class="pair-select" id="pairSignA"></select>
-                <span class="pair-caret" aria-hidden="true">⌄</span>
-                <p class="pair-meta" id="pairMetaA"></p>
+            <div class="pair-picker">
+              <button class="pair-trigger" id="pairTriggerA" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="pairMenuA" aria-label="选择主角 A 的星座，当前巨蟹座">
+                <span class="pair-glyph" id="pairGlyphA" aria-hidden="true">♋</span>
+                <span class="pair-trigger-copy">
+                  <span class="pair-name" id="pairNameA">巨蟹座</span>
+                  <span class="pair-meta" id="pairMetaA">水象 · 基本宫 · 阴性</span>
+                </span>
+                <span class="pair-trigger-caret" aria-hidden="true">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m2.5 4.5 3.5 3.5 3.5-3.5"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="sign-menu" id="pairMenuA" role="listbox" aria-label="选择主角 A 的星座" hidden>
+                <div class="sign-menu-head" role="presentation">
+                  <span>SELECT SIGN</span>
+                  <span>选择星座</span>
+                </div>
+                <div class="sign-menu-grid" role="presentation"></div>
               </div>
             </div>
           </div>
@@ -2403,13 +2635,25 @@
                 <button type="button" data-gender="any" aria-pressed="false">不限</button>
               </div>
             </div>
-            <div class="pair-person-main">
-              <span class="pair-glyph" id="pairGlyphB" aria-hidden="true">♏</span>
-              <div class="pair-select-wrap">
-                <label class="sr-only" for="pairSignB">主角 B 的星座</label>
-                <select class="pair-select" id="pairSignB"></select>
-                <span class="pair-caret" aria-hidden="true">⌄</span>
-                <p class="pair-meta" id="pairMetaB"></p>
+            <div class="pair-picker">
+              <button class="pair-trigger" id="pairTriggerB" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="pairMenuB" aria-label="选择主角 B 的星座，当前天蝎座">
+                <span class="pair-glyph" id="pairGlyphB" aria-hidden="true">♏</span>
+                <span class="pair-trigger-copy">
+                  <span class="pair-name" id="pairNameB">天蝎座</span>
+                  <span class="pair-meta" id="pairMetaB">水象 · 固定宫 · 阴性</span>
+                </span>
+                <span class="pair-trigger-caret" aria-hidden="true">
+                  <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m2.5 4.5 3.5 3.5 3.5-3.5"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="sign-menu" id="pairMenuB" role="listbox" aria-label="选择主角 B 的星座" hidden>
+                <div class="sign-menu-head" role="presentation">
+                  <span>SELECT SIGN</span>
+                  <span>选择星座</span>
+                </div>
+                <div class="sign-menu-grid" role="presentation"></div>
               </div>
             </div>
           </div>
@@ -2461,7 +2705,7 @@
           <div class="pair-best-list" id="pairBest"></div>
         </div>
 
-        <p class="pair-disclaimer">配对结果由性格原型与星象关系综合演绎，仅供娱乐｜性别选择只影响称呼与阅读视角</p>
+        <p class="pair-disclaimer">配对结果由性格原型与星象关系综合推演，非真实统计｜仅供娱乐｜性别只影响称呼与阅读视角</p>
         <p class="sr-only" id="pairLive" aria-live="polite"></p>
       </section>
     </main>
@@ -3243,7 +3487,8 @@
       pairGenderA: "female",
       pairGenderB: "male",
       pairToken: 0,
-      pairPending: false
+      pairPending: false,
+      openPairMenu: null
     };
 
     const els = {
@@ -3274,8 +3519,12 @@
       pairPersonB: document.getElementById("pairPersonB"),
       pairGenderA: document.getElementById("pairGenderA"),
       pairGenderB: document.getElementById("pairGenderB"),
-      pairSignA: document.getElementById("pairSignA"),
-      pairSignB: document.getElementById("pairSignB"),
+      pairTriggerA: document.getElementById("pairTriggerA"),
+      pairTriggerB: document.getElementById("pairTriggerB"),
+      pairMenuA: document.getElementById("pairMenuA"),
+      pairMenuB: document.getElementById("pairMenuB"),
+      pairNameA: document.getElementById("pairNameA"),
+      pairNameB: document.getElementById("pairNameB"),
       pairGlyphA: document.getElementById("pairGlyphA"),
       pairGlyphB: document.getElementById("pairGlyphB"),
       pairMetaA: document.getElementById("pairMetaA"),
@@ -3466,20 +3715,178 @@
         .slice(0, 3);
     }
 
-    function populatePairSelects() {
-      [els.pairSignA, els.pairSignB].forEach((select) => {
+    function signMenuRefs(side) {
+      return side === "a"
+        ? { trigger: els.pairTriggerA, menu: els.pairMenuA, person: els.pairPersonA, key: "pairA" }
+        : { trigger: els.pairTriggerB, menu: els.pairMenuB, person: els.pairPersonB, key: "pairB" };
+    }
+
+    function populateSignMenus() {
+      [els.pairMenuA, els.pairMenuB].forEach((menu) => {
+        const grid = menu.querySelector(".sign-menu-grid");
         const fragment = document.createDocumentFragment();
+
         SIGNS.forEach((sign) => {
-          const option = document.createElement("option");
-          option.value = sign.key;
-          option.textContent = `${sign.glyph} ${sign.name}`;
+          const option = document.createElement("button");
+          option.type = "button";
+          option.className = "sign-option";
+          option.dataset.sign = sign.key;
+          option.setAttribute("role", "option");
+          option.setAttribute("aria-selected", "false");
+          option.setAttribute("aria-label", `${sign.name}，${sign.element}`);
+          option.tabIndex = -1;
+          option.style.setProperty("--sign-color", sign.color);
+
+          const top = document.createElement("span");
+          top.className = "sign-option-top";
+
+          const glyph = document.createElement("span");
+          glyph.className = "sign-option-glyph";
+          glyph.setAttribute("aria-hidden", "true");
+          glyph.textContent = sign.glyph;
+
+          const name = document.createElement("span");
+          name.className = "sign-option-name";
+          name.textContent = sign.name;
+
+          const meta = document.createElement("span");
+          meta.className = "sign-option-meta";
+          meta.textContent = sign.element;
+
+          top.append(glyph, name);
+          option.append(top, meta);
           fragment.appendChild(option);
         });
-        select.replaceChildren(fragment);
+
+        grid.replaceChildren(fragment);
+      });
+    }
+
+    function syncSignMenus() {
+      [[els.pairMenuA, state.pairA], [els.pairMenuB, state.pairB]].forEach(([menu, selectedKey]) => {
+        menu.querySelectorAll(".sign-option").forEach((option) => {
+          const selected = option.dataset.sign === selectedKey;
+          option.setAttribute("aria-selected", String(selected));
+          option.tabIndex = selected ? 0 : -1;
+        });
       });
 
-      els.pairSignA.value = state.pairA;
-      els.pairSignB.value = state.pairB;
+      els.pairTriggerA.setAttribute("aria-label", `选择主角 A 的星座，当前${SIGN_MAP.get(state.pairA).name}`);
+      els.pairTriggerB.setAttribute("aria-label", `选择主角 B 的星座，当前${SIGN_MAP.get(state.pairB).name}`);
+    }
+
+    function closeSignMenus({ restoreFocus = false } = {}) {
+      const previousSide = state.openPairMenu;
+
+      ["a", "b"].forEach((side) => {
+        const { trigger, menu, person } = signMenuRefs(side);
+        trigger.setAttribute("aria-expanded", "false");
+        person.classList.remove("menu-open");
+        menu.classList.remove("is-up");
+        menu.hidden = true;
+      });
+
+      state.openPairMenu = null;
+
+      if (restoreFocus && previousSide) {
+        signMenuRefs(previousSide).trigger.focus({ preventScroll: true });
+      }
+    }
+
+    function openSignMenu(side) {
+      closeSignMenus();
+      const { trigger, menu, person } = signMenuRefs(side);
+      state.openPairMenu = side;
+      trigger.setAttribute("aria-expanded", "true");
+      person.classList.add("menu-open");
+      menu.hidden = false;
+      menu.classList.remove("is-up");
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const menuRect = menu.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - triggerRect.bottom - 22;
+      const spaceAbove = triggerRect.top - 22;
+      if (menuRect.height > spaceBelow && spaceAbove > spaceBelow) {
+        menu.classList.add("is-up");
+      }
+
+      const selected = menu.querySelector('.sign-option[aria-selected="true"]') || menu.querySelector(".sign-option");
+      if (selected) {
+        window.requestAnimationFrame(() => {
+          selected.focus({ preventScroll: true });
+        });
+      }
+    }
+
+    function toggleSignMenu(side) {
+      if (state.openPairMenu === side) {
+        closeSignMenus({ restoreFocus: true });
+      } else {
+        openSignMenu(side);
+      }
+    }
+
+    function choosePairSign(side, signKey) {
+      if (!SIGN_MAP.has(signKey)) {
+        return;
+      }
+
+      state[signMenuRefs(side).key] = signKey;
+      closeSignMenus();
+      renderPairing();
+      signMenuRefs(side).trigger.focus({ preventScroll: true });
+    }
+
+    function handleSignMenuKeydown(event, side) {
+      const { trigger, menu } = signMenuRefs(side);
+      const options = [...menu.querySelectorAll(".sign-option")];
+      const currentIndex = options.indexOf(document.activeElement);
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSignMenus();
+        trigger.focus({ preventScroll: true });
+        return;
+      }
+
+      if (event.key === "Tab") {
+        event.preventDefault();
+        closeSignMenus();
+        trigger.focus({ preventScroll: true });
+        return;
+      }
+
+      if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+        event.preventDefault();
+        options[(currentIndex + 1 + options.length) % options.length].focus();
+        return;
+      }
+
+      if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        options[(currentIndex - 1 + options.length) % options.length].focus();
+        return;
+      }
+
+      if (event.key === "Home") {
+        event.preventDefault();
+        options[0].focus();
+        return;
+      }
+
+      if (event.key === "End") {
+        event.preventDefault();
+        options[options.length - 1].focus();
+        return;
+      }
+
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        const option = options[currentIndex];
+        if (option) {
+          choosePairSign(side, option.dataset.sign);
+        }
+      }
     }
 
     function syncPairGenders() {
@@ -3659,9 +4066,10 @@
       els.pairCard.style.setProperty("--pair-b-color", b.color);
       els.pairPersonA.style.setProperty("--pair-sign-color", a.color);
       els.pairPersonB.style.setProperty("--pair-sign-color", b.color);
-      els.pairSignA.value = a.key;
-      els.pairSignB.value = b.key;
+      els.pairNameA.textContent = a.name;
+      els.pairNameB.textContent = b.name;
       syncPairGenders();
+      syncSignMenus();
 
       els.pairGlyphA.textContent = a.glyph;
       els.pairGlyphB.textContent = b.glyph;
@@ -4365,20 +4773,55 @@
       renderChart(topic, buildRanking(topic));
     });
 
-    els.pairSignA.addEventListener("change", () => {
-      if (!SIGN_MAP.has(els.pairSignA.value)) {
-        return;
-      }
-      state.pairA = els.pairSignA.value;
-      renderPairing();
+    els.pairTriggerA.addEventListener("click", () => {
+      toggleSignMenu("a");
     });
 
-    els.pairSignB.addEventListener("change", () => {
-      if (!SIGN_MAP.has(els.pairSignB.value)) {
-        return;
+    els.pairTriggerB.addEventListener("click", () => {
+      toggleSignMenu("b");
+    });
+
+    [["a", els.pairTriggerA, els.pairMenuA], ["b", els.pairTriggerB, els.pairMenuB]].forEach(([side, trigger, menu]) => {
+      trigger.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault();
+          openSignMenu(side);
+        }
+
+        if (event.key === "Escape") {
+          closeSignMenus();
+        }
+      });
+
+      menu.addEventListener("click", (event) => {
+        const option = event.target.closest("[data-sign]");
+        if (!option) {
+          return;
+        }
+        choosePairSign(side, option.dataset.sign);
+      });
+
+      menu.addEventListener("keydown", (event) => {
+        handleSignMenuKeydown(event, side);
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".pair-picker")) {
+        closeSignMenus();
       }
-      state.pairB = els.pairSignB.value;
-      renderPairing();
+    });
+
+    window.addEventListener("scroll", () => {
+      if (state.openPairMenu) {
+        closeSignMenus();
+      }
+    }, { passive: true });
+
+    window.addEventListener("resize", () => {
+      if (state.openPairMenu) {
+        closeSignMenus();
+      }
     });
 
     els.pairGenderA.addEventListener("click", (event) => {
@@ -4408,7 +4851,7 @@
       renderPairing();
     });
 
-    populatePairSelects();
+    populateSignMenus();
     renderPairing({ initial: true });
     observePairCard();
     renderGroupBar();
