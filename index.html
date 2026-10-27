@@ -1,0 +1,2873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="十二星座趣味性格数据榜：36 个精选维度，也能自由出题生成图表，柱状图从 0 开始生长。内容仅供娱乐。">
+  <title>十二星座趣味数据榜</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b3b34'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23f7f3e8'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f2eee6;
+      --surface: #fffdf9;
+      --surface-soft: #faf6ee;
+      --ink: #1c211d;
+      --ink-soft: #465047;
+      --muted: #85877d;
+      --line: #e8e1d5;
+      --line-strong: #d8cfc0;
+      --accent: #24735a;
+      --accent-deep: #18543f;
+      --accent-soft: #eaf2ed;
+      --gold: #b58a4c;
+      --plot-h: 406px;
+      --chart-pad: 14px;
+      --chart-gap: 12px;
+      --num-font: "Bahnschrift", "DIN Alternate", "SF Pro Display", "Inter", sans-serif;
+      --ui-font: "Inter", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% -8%, rgba(255, 255, 255, 0.98) 0, rgba(255, 255, 255, 0) 36%),
+        radial-gradient(circle at 96% 9%, rgba(206, 176, 124, 0.14) 0, rgba(206, 176, 124, 0) 34%),
+        var(--bg);
+      font-family: var(--ui-font);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    ::selection {
+      color: var(--surface);
+      background: var(--accent);
+    }
+
+    .page {
+      width: min(1260px, calc(100% - 64px));
+      margin: 0 auto;
+      padding-bottom: 42px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 2px 20px;
+      border-bottom: 1px solid rgba(28, 33, 29, 0.12);
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+    }
+
+    .wordmark .spark {
+      color: var(--accent);
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .wordmark .cn {
+      padding-left: 12px;
+      border-left: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+    }
+
+    .topbar-note {
+      color: var(--muted);
+      font-family: var(--num-font);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 350px);
+      gap: 40px;
+      align-items: end;
+      padding: 42px 0 30px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      color: var(--accent);
+      font-family: var(--num-font);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+    }
+
+    .eyebrow::before {
+      width: 23px;
+      height: 1px;
+      background: var(--accent);
+      content: "";
+    }
+
+    h1 {
+      margin: 15px 0 0;
+      font-size: clamp(58px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.075em;
+    }
+
+    h1 .period {
+      color: var(--accent);
+    }
+
+    .hero-aside {
+      padding: 0 0 7px 24px;
+      border-left: 1px solid var(--line-strong);
+    }
+
+    .hero-aside > p {
+      margin: 0 0 18px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .live-dot {
+      flex: 0 0 auto;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(36, 115, 90, 0.11);
+    }
+
+    .hero-aside-extra {
+      display: block;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 400;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
+
+    .deck {
+      margin-bottom: 20px;
+      padding: 15px 18px 13px;
+      border: 1px solid rgba(95, 83, 64, 0.13);
+      border-radius: 20px;
+      background: rgba(255, 253, 249, 0.78);
+      box-shadow: 0 14px 40px rgba(47, 43, 31, 0.035);
+      backdrop-filter: blur(14px);
+    }
+
+    .deck-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .deck-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .free-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border: 1px solid rgba(36, 115, 90, 0.26);
+      border-radius: 999px;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .free-btn:hover {
+      border-color: rgba(36, 115, 90, 0.44);
+      background: #e2eee7;
+    }
+
+    .free-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      color: var(--surface);
+      background: var(--accent);
+      box-shadow: 0 8px 18px rgba(36, 115, 90, 0.18);
+    }
+
+    .free-btn .free-spark {
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .deck-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-family: var(--num-font);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+    }
+
+    .deck-title::before {
+      width: 15px;
+      height: 1px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .deck-hint {
+      color: #aaa99f;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .group-bar,
+    .topic-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .group-bar {
+      gap: 2px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .group-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: color 180ms ease, background 180ms ease;
+    }
+
+    .group-btn:hover {
+      color: var(--ink);
+      background: rgba(28, 33, 29, 0.045);
+    }
+
+    .group-btn.active {
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+    }
+
+    .group-count {
+      color: currentColor;
+      font-family: var(--num-font);
+      font-size: 9px;
+      font-weight: 500;
+      opacity: 0.55;
+    }
+
+    .topic-bar {
+      gap: 5px;
+      padding-top: 10px;
+    }
+
+    .topic-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 550;
+      line-height: 1.15;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .topic-btn:hover {
+      border-color: var(--line);
+      background: var(--surface-soft);
+    }
+
+    .topic-btn.active {
+      border-color: var(--ink);
+      color: var(--surface);
+      background: var(--ink);
+      box-shadow: 0 8px 18px rgba(28, 33, 29, 0.14);
+    }
+
+    .topic-btn.custom-chip {
+      border-color: rgba(36, 115, 90, 0.28);
+      border-style: dashed;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+    }
+
+    .topic-btn.custom-chip .topic-no {
+      color: var(--accent);
+      opacity: 0.9;
+    }
+
+    .topic-btn.custom-chip:hover {
+      border-color: rgba(36, 115, 90, 0.5);
+      background: #e2eee7;
+    }
+
+    .topic-btn.custom-chip.active {
+      border-style: solid;
+      border-color: var(--accent);
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 8px 18px rgba(36, 115, 90, 0.2);
+    }
+
+    .topic-btn.custom-chip.active .topic-no {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .custom-chip .chip-label {
+      max-width: 13em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topic-no {
+      color: var(--muted);
+      font-family: var(--num-font);
+      font-size: 9px;
+      letter-spacing: 0.04em;
+    }
+
+    .topic-btn.active .topic-no {
+      color: rgba(255, 255, 255, 0.56);
+    }
+
+    .custom-panel {
+      margin-top: 10px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      animation: custom-in 220ms ease both;
+    }
+
+    .custom-form {
+      margin: 0;
+    }
+
+    @keyframes custom-in {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+    }
+
+    .custom-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 7px 7px 13px;
+      border: 1px solid var(--line-strong);
+      border-radius: 13px;
+      background: var(--surface);
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .custom-field:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(36, 115, 90, 0.075);
+    }
+
+    .custom-spark {
+      flex: 0 0 auto;
+      color: var(--accent);
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .custom-input {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 7px 0;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-family: inherit;
+      font-size: 13.5px;
+      letter-spacing: 0.01em;
+    }
+
+    .custom-input::placeholder {
+      color: #aaa89f;
+    }
+
+    .custom-submit {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 180ms ease;
+    }
+
+    .custom-submit:hover {
+      background: var(--accent-deep);
+    }
+
+    .custom-submit svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .custom-meta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 9px;
+    }
+
+    .custom-examples {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .custom-examples > span {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.03em;
+    }
+
+    .example-chip {
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: transparent;
+      font-size: 10.5px;
+      line-height: 1.25;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .example-chip:hover {
+      border-color: var(--line-strong);
+      color: var(--accent-deep);
+      background: var(--surface-soft);
+    }
+
+    .custom-note {
+      flex: 0 0 auto;
+      margin: 1px 0 0;
+      color: #aaa79d;
+      font-size: 9.5px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .custom-error {
+      margin: 8px 0 0;
+      color: #b4463b;
+      font-size: 11px;
+    }
+
+    .chart-card {
+      position: relative;
+      overflow: hidden;
+      padding: 30px 34px 20px;
+      border: 1px solid rgba(95, 83, 64, 0.12);
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: 0 28px 70px rgba(60, 53, 38, 0.075);
+    }
+
+    .chart-card::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #86a56d 32%, var(--gold) 66%, transparent 92%);
+      content: "";
+      opacity: 0.82;
+    }
+
+    .chart-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .chart-copy {
+      min-width: 0;
+    }
+
+    .chart-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+    }
+
+    .no-badge {
+      padding: 4px 7px;
+      border-radius: 5px;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      font-family: var(--num-font);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .kicker-sep {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--line-strong);
+    }
+
+    .chart-title {
+      margin: 13px 0 9px;
+      color: var(--ink);
+      font-size: clamp(31px, 4vw, 44px);
+      font-weight: 760;
+      line-height: 1.25;
+      letter-spacing: -0.045em;
+    }
+
+    .chart-title em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .chart-desc {
+      max-width: 650px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.75;
+    }
+
+    .chart-actions {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 7px;
+      padding-top: 2px;
+    }
+
+    .tool-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--line-strong);
+      background: var(--surface-soft);
+    }
+
+    .tool-btn[aria-pressed="true"] {
+      border-color: var(--ink);
+      color: var(--surface);
+      background: var(--ink);
+    }
+
+    .tool-btn svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 auto;
+    }
+
+    .scroll-hint {
+      display: none;
+      margin: 17px 0 -2px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .chart-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin-top: 14px;
+      padding-bottom: 2px;
+      scrollbar-color: var(--line-strong) transparent;
+      scrollbar-width: thin;
+    }
+
+    .chart-scroll::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .chart-scroll::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: var(--line-strong);
+    }
+
+    .chart {
+      display: grid;
+      grid-template-columns: 50px minmax(0, 1fr);
+      gap: 11px;
+      min-width: 780px;
+      padding-top: 24px;
+    }
+
+    .axis {
+      position: relative;
+      height: var(--plot-h);
+    }
+
+    .axis-tick {
+      position: absolute;
+      right: 0;
+      color: #aaa89f;
+      font-family: var(--num-font);
+      font-size: 10.5px;
+      line-height: 1;
+      letter-spacing: 0.015em;
+      transform: translateY(-50%);
+    }
+
+    .axis-title {
+      position: absolute;
+      top: -22px;
+      right: 0;
+      color: #b4b1a7;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .plot-wrap {
+      min-width: 0;
+    }
+
+    .plot {
+      position: relative;
+      height: var(--plot-h);
+    }
+
+    .gridlines {
+      position: absolute;
+      inset: 0 var(--chart-pad);
+      pointer-events: none;
+    }
+
+    .gridline {
+      position: absolute;
+      right: 0;
+      left: 0;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .gridline:last-child {
+      background: var(--line-strong);
+    }
+
+    .bar-layer {
+      position: absolute;
+      inset: 0 var(--chart-pad);
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--chart-gap);
+      align-items: end;
+    }
+
+    .bar-col {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 100%;
+      min-width: 0;
+    }
+
+    .bar {
+      position: relative;
+      width: min(46px, 62%);
+      height: 0%;
+      border-radius: 6px 6px 2px 2px;
+      background: linear-gradient(180deg, var(--bar-top), var(--bar-bottom));
+      box-shadow: 0 10px 22px rgba(53, 54, 43, 0.08);
+      transition: height 1100ms cubic-bezier(0.16, 1, 0.3, 1), filter 180ms ease, transform 180ms ease;
+      will-change: height;
+    }
+
+    .bar::after {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 42%;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.19), rgba(255, 255, 255, 0));
+      content: "";
+      pointer-events: none;
+    }
+
+    .bar-col:hover .bar {
+      filter: saturate(1.08) brightness(0.98);
+      transform: scaleX(1.04);
+    }
+
+    .bar-value {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      color: var(--ink);
+      font-family: var(--num-font);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+
+    .bar[data-top="1"] .bar-value,
+    .bar[data-top="2"] .bar-value,
+    .bar[data-top="3"] .bar-value {
+      color: var(--accent-deep);
+    }
+
+    .x-axis {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--chart-gap);
+      min-height: 78px;
+      padding: 16px var(--chart-pad) 0;
+    }
+
+    .x-cell {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 0;
+      transform-origin: top center;
+    }
+
+    .x-cell span {
+      display: block;
+      color: #5f665f;
+      font-size: 13px;
+      font-weight: 550;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      transform: rotate(-42deg);
+      transform-origin: top center;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      margin-top: 2px;
+      padding-top: 23px;
+      border-top: 1px solid var(--line);
+    }
+
+    .summary-label {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .summary-star {
+      color: var(--gold);
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .summary-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .summary-en {
+      color: var(--muted);
+      font-family: var(--num-font);
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+    }
+
+    .summary-cn {
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+    }
+
+    .top3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .rank-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      padding: 12px 13px 12px 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-soft);
+    }
+
+    .rank-card::before {
+      position: absolute;
+      top: 11px;
+      bottom: 11px;
+      left: 0;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: var(--sign-color);
+      content: "";
+    }
+
+    .rank-index {
+      flex: 0 0 auto;
+      align-self: flex-start;
+      margin-top: 1px;
+      color: var(--muted);
+      font-family: var(--num-font);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .rank-glyph {
+      display: grid;
+      flex: 0 0 auto;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--sign-color) 26%, transparent);
+      border-radius: 50%;
+      color: var(--sign-color);
+      background: color-mix(in srgb, var(--sign-color) 9%, white);
+      font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .rank-sign {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .rank-sign strong {
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 12.5px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rank-sign small {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 9.5px;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rank-score {
+      margin-left: auto;
+      color: var(--ink);
+      font-family: var(--num-font);
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .insight {
+      display: flex;
+      gap: 13px;
+      margin-top: 16px;
+      padding: 15px 17px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-soft);
+    }
+
+    .insight-mark {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      color: var(--accent);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .insight-label {
+      margin: 0 0 4px;
+      color: var(--accent-deep);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+    }
+
+    .insight p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 12.5px;
+      line-height: 1.8;
+    }
+
+    .disclaimer {
+      margin: 17px 0 0;
+      color: #aeaba1;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+
+    .page-footer {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 24px 2px 0;
+      color: var(--muted);
+    }
+
+    .footer-mark {
+      flex: 0 0 auto;
+      color: var(--gold);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .page-footer p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 10.5px;
+      line-height: 1.8;
+      letter-spacing: 0.015em;
+    }
+
+    .footer-meta {
+      flex: 0 0 auto;
+      padding-top: 1px;
+      font-family: var(--num-font);
+      font-size: 9px;
+      letter-spacing: 0.11em;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        width: min(100% - 38px, 900px);
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1fr) 280px;
+        gap: 24px;
+      }
+
+      .hero-aside {
+        padding-left: 20px;
+      }
+
+      .chart-head {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .chart-actions {
+        padding-top: 0;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .chart-card {
+        padding: 28px 26px 20px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100% - 28px);
+      }
+
+      .topbar {
+        padding-top: 18px;
+      }
+
+      .wordmark .cn {
+        display: none;
+      }
+
+      .topbar-note {
+        font-size: 9px;
+      }
+
+      .hero {
+        display: block;
+        padding: 31px 0 24px;
+      }
+
+      h1 {
+        font-size: clamp(54px, 18vw, 78px);
+      }
+
+      .hero-aside {
+        margin-top: 21px;
+        padding: 16px 0 0;
+        border-top: 1px solid var(--line-strong);
+        border-left: 0;
+      }
+
+      .hero-aside > p {
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+
+      .hero-aside-extra {
+        margin-top: 7px;
+        font-size: 11px;
+      }
+
+      .deck {
+        padding: 13px 12px 12px;
+        border-radius: 16px;
+      }
+
+      .deck-hint {
+        display: none;
+      }
+
+      .deck-head {
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .deck-head-actions {
+        flex: 0 0 auto;
+      }
+
+      .deck-title {
+        font-size: 9px;
+        letter-spacing: 0.1em;
+      }
+
+      .free-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+
+      .custom-field {
+        padding-left: 10px;
+      }
+
+      .custom-input {
+        font-size: 12.5px;
+      }
+
+      .custom-submit {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .custom-meta {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .custom-note {
+        text-align: left;
+      }
+
+      .example-chip {
+        font-size: 10px;
+      }
+
+      .group-bar {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .group-bar::-webkit-scrollbar,
+      .topic-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      .group-btn {
+        padding: 7px 9px;
+        white-space: nowrap;
+      }
+
+      .topic-bar {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 1px;
+        scrollbar-width: none;
+      }
+
+      .topic-btn {
+        padding: 8px 11px;
+        font-size: 12.5px;
+      }
+
+      .custom-chip .chip-label {
+        max-width: 9em;
+      }
+
+      .chart-card {
+        padding: 23px 15px 17px;
+        border-radius: 21px;
+      }
+
+      .chart-card::before {
+        opacity: 0.7;
+      }
+
+      .chart-kicker {
+        font-size: 9.5px;
+      }
+
+      .chart-title {
+        margin-top: 11px;
+        font-size: clamp(28px, 8vw, 38px);
+      }
+
+      .chart-desc {
+        font-size: 12.5px;
+        line-height: 1.7;
+      }
+
+      .tool-btn {
+        padding: 7px 11px;
+        font-size: 11.5px;
+      }
+
+      .scroll-hint {
+        display: block;
+      }
+
+      .chart {
+        grid-template-columns: 43px minmax(0, 1fr);
+        gap: 8px;
+        min-width: 760px;
+        padding-top: 20px;
+      }
+
+      .chart-scroll {
+        margin-top: 7px;
+      }
+
+      .axis-tick {
+        font-size: 9.5px;
+      }
+
+      .x-axis {
+        min-height: 72px;
+      }
+
+      .x-cell span {
+        font-size: 12.5px;
+      }
+
+      .bar-value {
+        font-size: 12px;
+      }
+
+      .summary {
+        margin-top: 0;
+        padding-top: 18px;
+      }
+
+      .top3 {
+        grid-template-columns: 1fr;
+      }
+
+      .insight {
+        margin-top: 13px;
+        padding: 13px 14px;
+      }
+
+      .insight p {
+        font-size: 12px;
+        line-height: 1.75;
+      }
+
+      .disclaimer {
+        font-size: 9.5px;
+      }
+
+      .page-footer {
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        padding-top: 19px;
+      }
+
+      .page-footer p {
+        order: 3;
+        flex-basis: 100%;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .topbar-note {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .bar {
+        transition: none;
+      }
+
+      .custom-panel {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="topbar">
+        <div class="wordmark">
+          <span class="spark">✦</span>
+          <span>ZODIAC INDEX</span>
+          <span class="cn">星象趣味研究所</span>
+        </div>
+        <div class="topbar-note">12 SIGNS · 36 TOPICS · ∞ CUSTOM</div>
+      </div>
+
+      <div class="hero">
+        <div>
+          <p class="eyebrow">PERSONALITY RANKING</p>
+          <h1>十二星座<span class="period">。</span></h1>
+        </div>
+        <div class="hero-aside">
+          <p>把十二种性格<br>写成一张会生长的图。<span class="hero-aside-extra">36 个精选维度之外，也可以写你自己的题。</span></p>
+          <div class="hero-meta">
+            <span class="live-dot"></span>
+            <span>性格原型取自占星传统 · 数值为趣味演绎</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="deck" aria-label="榜单主题选择">
+        <div class="deck-head">
+          <div class="deck-title">SELECT A TOPIC · 选择观察维度</div>
+          <div class="deck-head-actions">
+            <div class="deck-hint">切换后，数据会从 0 重新生长</div>
+            <button class="free-btn" id="customToggle" type="button" aria-expanded="false" aria-controls="customPanel">
+              <span class="free-spark" aria-hidden="true">✦</span>
+              <span id="customToggleLabel">自由出题</span>
+            </button>
+          </div>
+        </div>
+        <div class="group-bar" id="groupBar" aria-label="榜单分类"></div>
+        <div class="topic-bar" id="topicBar" aria-label="具体榜单"></div>
+
+        <div class="custom-panel" id="customPanel" hidden>
+          <form class="custom-form" id="customForm" novalidate>
+            <label class="sr-only" for="customInput">输入你想看的星座维度</label>
+            <div class="custom-field">
+              <span class="custom-spark" aria-hidden="true">✦</span>
+              <input class="custom-input" id="customInput" type="text" maxlength="30" autocomplete="off" enterkeyhint="send" placeholder="想看什么？例如：最会写代码、最容易失眠">
+              <button class="custom-submit" type="submit">
+                生成图表
+                <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2.5 8h11M9.2 3.7 13.5 8l-4.3 4.3"/>
+                </svg>
+              </button>
+            </div>
+            <div class="custom-meta">
+              <div class="custom-examples" aria-label="示例题目">
+                <span>试试</span>
+                <button class="example-chip" type="button" data-example="最会写代码">最会写代码</button>
+                <button class="example-chip" type="button" data-example="最容易失眠">最容易失眠</button>
+                <button class="example-chip" type="button" data-example="最适合当领导">最适合当领导</button>
+                <button class="example-chip" type="button" data-example="最会养宠物">最会养宠物</button>
+                <button class="example-chip" type="button" data-example="最容易中彩票">最容易中彩票</button>
+                <button class="example-chip" type="button" data-example="最不擅长早起">最不擅长早起</button>
+              </div>
+              <p class="custom-note">关键词联想生成<br>非真实统计</p>
+            </div>
+            <p class="custom-error" id="customError" role="alert" hidden></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="chart-card" aria-label="星座数据图表">
+        <div class="chart-head">
+          <div class="chart-copy">
+            <div class="chart-kicker">
+              <span class="no-badge">NO.<span id="chartNo">01</span></span>
+              <span id="chartGroup">情感模式</span>
+              <span class="kicker-sep"></span>
+              <span>星象指数 / 20000</span>
+            </div>
+            <h2 class="chart-title" id="topicTitle">对婚姻最忠诚的星座</h2>
+            <p class="chart-desc" id="topicDesc"></p>
+          </div>
+          <div class="chart-actions">
+            <button class="tool-btn" id="sortBtn" type="button" aria-pressed="false" title="切换为按指数从高到低排列">
+              <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 2.5v11M5 13.5 2.6 11M5 13.5 7.4 11M11 13.5v-11M11 2.5 8.6 5M11 2.5l2.4 2.5"/>
+              </svg>
+              <span id="sortLabel">按排名排列</span>
+            </button>
+            <button class="tool-btn" id="replayBtn" type="button" title="让柱状图重新从 0 生长">
+              <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13.3 6.2A5.5 5.5 0 1 0 13.5 9"/>
+                <path d="M13.3 2.8v3.4H9.9"/>
+              </svg>
+              <span>重新演示</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="scroll-hint">左右滑动查看全部星座 →</div>
+
+        <div class="chart-scroll" id="chartScroll">
+          <div class="chart" id="chartRegion" role="img" aria-label="十二星座数据柱状图">
+            <div class="axis" aria-hidden="true">
+              <span class="axis-title">INDEX</span>
+              <span class="axis-tick" style="top: 0%;">20000</span>
+              <span class="axis-tick" style="top: 25%;">15000</span>
+              <span class="axis-tick" style="top: 50%;">10000</span>
+              <span class="axis-tick" style="top: 75%;">5000</span>
+              <span class="axis-tick" style="top: 100%;">0</span>
+            </div>
+            <div class="plot-wrap">
+              <div class="plot">
+                <div class="gridlines" aria-hidden="true">
+                  <i class="gridline" style="top: 0%;"></i>
+                  <i class="gridline" style="top: 25%;"></i>
+                  <i class="gridline" style="top: 50%;"></i>
+                  <i class="gridline" style="top: 75%;"></i>
+                  <i class="gridline" style="top: 100%;"></i>
+                </div>
+                <div class="bar-layer" id="barLayer"></div>
+              </div>
+              <div class="x-axis" id="xAxis" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary">
+          <div class="summary-label">
+            <span class="summary-star">✧</span>
+            <div class="summary-copy">
+              <span class="summary-en">TOP THREE</span>
+              <span class="summary-cn">本期星象前三</span>
+            </div>
+          </div>
+          <div class="top3" id="top3"></div>
+        </div>
+
+        <div class="insight">
+          <span class="insight-mark" aria-hidden="true">✦</span>
+          <div>
+            <p class="insight-label">星象批注</p>
+            <p id="insightText"></p>
+          </div>
+        </div>
+
+        <p class="disclaimer">内容仅供娱乐｜数值均为虚拟量化｜请勿轻信</p>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <span class="footer-mark">✦</span>
+      <p>性格原型参考西方占星学中四元素、三形态、守护星与宫位的常见象征体系；精选指数与自由出题结果都由性格倾向映射而成，不代表统计数据、科学结论或任何现实建议。</p>
+      <span class="footer-meta">36 CURATED / ∞ CUSTOM</span>
+    </footer>
+  </div>
+
+  <noscript>
+    <p style="text-align:center;padding:20px;">请开启 JavaScript 以查看动态数据图。</p>
+  </noscript>
+
+  <script>
+    const SIGNS = [
+      { key: "aries",       name: "白羊座", glyph: "♈", element: "火象", ruler: "火星",       color: "#F0A05A", deep: "#D98139" },
+      { key: "taurus",      name: "金牛座", glyph: "♉", element: "土象", ruler: "金星",       color: "#E76F51", deep: "#C95236" },
+      { key: "gemini",      name: "双子座", glyph: "♊", element: "风象", ruler: "水星",       color: "#F08D9B", deep: "#D66877" },
+      { key: "cancer",      name: "巨蟹座", glyph: "♋", element: "水象", ruler: "月亮",       color: "#6772D4", deep: "#4B57B8" },
+      { key: "leo",         name: "狮子座", glyph: "♌", element: "火象", ruler: "太阳",       color: "#EF887C", deep: "#D6685B" },
+      { key: "virgo",       name: "处女座", glyph: "♍", element: "土象", ruler: "水星",       color: "#2A9D8F", deep: "#1D7D71" },
+      { key: "libra",       name: "天秤座", glyph: "♎", element: "风象", ruler: "金星",       color: "#F0BF4A", deep: "#D6A52B" },
+      { key: "scorpio",     name: "天蝎座", glyph: "♏", element: "水象", ruler: "冥王星",     color: "#9A71CB", deep: "#7B51B5" },
+      { key: "sagittarius", name: "射手座", glyph: "♐", element: "火象", ruler: "木星",       color: "#4DA577", deep: "#34875C" },
+      { key: "capricorn",   name: "摩羯座", glyph: "♑", element: "土象", ruler: "土星",       color: "#2F7C78", deep: "#1D615E" },
+      { key: "aquarius",    name: "水瓶座", glyph: "♒", element: "风象", ruler: "天王星",     color: "#3E7BF0", deep: "#2561D7" },
+      { key: "pisces",      name: "双鱼座", glyph: "♓", element: "水象", ruler: "海王星",     color: "#48B2C5", deep: "#2D93A7" }
+    ];
+
+    const GROUPS = [
+      {
+        id: "love",
+        name: "情感模式",
+        topics: [
+          {
+            id: "marriage",
+            tab: "婚姻忠诚",
+            title: "对婚姻最忠诚的星座",
+            desc: "以月亮、金星与固定宫的关系观为线索，看谁最愿意把承诺过成日常。",
+            range: [19080, 3120],
+            order: ["cancer", "scorpio", "taurus", "capricorn", "pisces", "virgo", "leo", "libra", "aquarius", "aries", "gemini", "sagittarius"],
+            insight: "月亮守护的巨蟹把「家」写进安全感，认定一个人就会把忠诚落到一日三餐；固定水象的天蝎要求绝对真诚，边界一旦确立便很难动摇；金星守护的金牛慢热却长情，用稳定和陪伴兑现承诺。"
+          },
+          {
+            id: "jealousy",
+            tab: "吃醋指数",
+            title: "最容易吃醋的星座",
+            desc: "占有欲与安全感在星盘里拔河，有人把在意写在脸上，有人默默扣分。",
+            range: [18460, 3860],
+            order: ["scorpio", "cancer", "taurus", "leo", "pisces", "virgo", "aries", "libra", "capricorn", "gemini", "sagittarius", "aquarius"],
+            insight: "天蝎对亲密关系有天然的领地意识；巨蟹的醋意多来自「怕失去」；金牛则是慢热又固定的占有欲，一旦认定就不喜欢变量。"
+          },
+          {
+            id: "first-sight",
+            tab: "一见钟情",
+            title: "最容易一见钟情的星座",
+            desc: "有人靠第一眼的火花心动，有人要等时间把答案写清楚。",
+            range: [17780, 2480],
+            order: ["aries", "pisces", "leo", "sagittarius", "libra", "gemini", "scorpio", "cancer", "aquarius", "virgo", "taurus", "capricorn"],
+            insight: "白羊相信直觉，心动和行动几乎同步；双鱼自带浪漫滤镜，很容易被一个眼神写成长篇故事；狮子则常被对方的光亮与舞台感瞬间击中。"
+          },
+          {
+            id: "coquettish",
+            tab: "撒娇天赋",
+            title: "最会撒娇的星座",
+            desc: "不是刻意示弱，而是让人心甘情愿说「好好好」的软实力。",
+            range: [17460, 2940],
+            order: ["pisces", "cancer", "libra", "gemini", "leo", "aries", "scorpio", "virgo", "sagittarius", "aquarius", "taurus", "capricorn"],
+            insight: "双鱼的软糯与共情几乎没有攻击性；巨蟹懂得用依赖感拉近距离；天秤最会在气氛里给出台阶，让撒娇听起来像体贴。"
+          },
+          {
+            id: "cold-war",
+            tab: "冷战耐力",
+            title: "最擅长冷战的星座",
+            desc: "谁能在沉默里撑得最久？这份榜单比的不是脾气，是耐力与边界感。",
+            range: [19300, 4210],
+            order: ["scorpio", "capricorn", "taurus", "aquarius", "virgo", "cancer", "leo", "libra", "gemini", "pisces", "aries", "sagittarius"],
+            insight: "天蝎的沉默是观察与防守，不等到真诚回应很难破冰；摩羯把情绪收进秩序里，能长期保持距离；金牛的固定能量让它尤其擅长「敌不动我不动」。"
+          },
+          {
+            id: "love-brain",
+            tab: "恋爱脑",
+            title: "最容易恋爱脑的星座",
+            desc: "把感情调到人生的最大音量，理智容易暂时退到幕后。",
+            range: [19120, 2760],
+            order: ["pisces", "cancer", "scorpio", "leo", "libra", "aries", "virgo", "taurus", "sagittarius", "gemini", "capricorn", "aquarius"],
+            insight: "双鱼愿意为爱牺牲，也容易把理想投射到对方身上；巨蟹在关系里寻找归属，会把照顾与依赖混在一起；天蝎一旦投入，注意力会高度集中在伴侣身上。"
+          }
+        ]
+      },
+      {
+        id: "self",
+        name: "性格底色",
+        topics: [
+          {
+            id: "grudge",
+            tab: "爱记仇",
+            title: "最爱记仇的星座",
+            desc: "不是每一笔都翻旧账，但有些细节会被它们妥善存档。",
+            range: [19740, 1860],
+            order: ["scorpio", "taurus", "cancer", "virgo", "capricorn", "leo", "pisces", "libra", "aquarius", "gemini", "aries", "sagittarius"],
+            insight: "天蝎对伤害的记忆与边界感都极强；金牛的固定模式让「过不去」变成长期状态；巨蟹记住的往往是当时的情绪温度。"
+          },
+          {
+            id: "tough-soft",
+            tab: "嘴硬心软",
+            title: "最嘴硬心软的星座",
+            desc: "嘴上说着「随便」，心里已经悄悄留好了位置。",
+            range: [18260, 4380],
+            order: ["scorpio", "leo", "taurus", "virgo", "capricorn", "aries", "cancer", "gemini", "sagittarius", "libra", "aquarius", "pisces"],
+            insight: "天蝎常用冷淡保护在意；狮子的骄傲像盔甲，先低头反而更难；金牛话说得硬，行动上却会把照顾做满。"
+          },
+          {
+            id: "overthinking",
+            tab: "情绪内耗",
+            title: "最容易情绪内耗的星座",
+            desc: "同一件小事，在心里可以拐十八个弯。",
+            range: [19180, 2240],
+            order: ["virgo", "cancer", "scorpio", "pisces", "libra", "capricorn", "taurus", "leo", "gemini", "aquarius", "aries", "sagittarius"],
+            insight: "处女座习惯反复复盘，用内耗换取确定感；巨蟹对情绪细节异常敏感，容易把别人的沉默归因于自己；天蝎会在无人处把感受推演到最深。"
+          },
+          {
+            id: "freedom",
+            tab: "向往自由",
+            title: "最向往自由的星座",
+            desc: "不是逃避亲密，而是需要一块谁也进不来的自留地。",
+            range: [19520, 1680],
+            order: ["sagittarius", "aquarius", "gemini", "aries", "libra", "leo", "pisces", "scorpio", "cancer", "virgo", "taurus", "capricorn"],
+            insight: "射手把远方当成呼吸，约束越紧反而越想跑；水瓶需要精神独立，关系里必须保留自我；双子靠变化保持活力，最怕一成不变的日常。"
+          },
+          {
+            id: "honesty",
+            tab: "诚实坦率",
+            title: "最诚实坦率的星座",
+            desc: "有话直说不等于不温柔，但转弯这件事，它们真的不太会。",
+            range: [17940, 2380],
+            order: ["sagittarius", "aries", "leo", "taurus", "virgo", "capricorn", "scorpio", "aquarius", "cancer", "gemini", "libra", "pisces"],
+            insight: "射手通常诚实到近乎直白；白羊更习惯把立场摊在台面上；狮子不爱绕圈子，也不擅长伪装不在乎。"
+          },
+          {
+            id: "stubborn",
+            tab: "固执己见",
+            title: "最固执己见的星座",
+            desc: "意见不同没关系，但让它们改主意需要证据、时间与一点尊重。",
+            range: [19360, 2680],
+            order: ["taurus", "scorpio", "aquarius", "leo", "capricorn", "virgo", "aries", "cancer", "gemini", "libra", "pisces", "sagittarius"],
+            insight: "金牛的坚持来自习惯和对稳定的信任；天蝎认定的事很难被说服；水瓶则坚持自己的逻辑体系，越被施压越不松口。"
+          }
+        ]
+      },
+      {
+        id: "home",
+        name: "家庭温度",
+        topics: [
+          {
+            id: "filial",
+            tab: "孝顺",
+            title: "最孝顺的星座",
+            desc: "孝顺有时是黏人的陪伴，有时是把责任默默做完。",
+            range: [18720, 3350],
+            order: ["cancer", "capricorn", "taurus", "virgo", "pisces", "leo", "scorpio", "libra", "aries", "gemini", "aquarius", "sagittarius"],
+            insight: "巨蟹把家人放进情绪中心，关怀细到日常；摩羯习惯用责任与物质保障表达爱；金牛重传统，也愿意为家提供稳定底色。"
+          },
+          {
+            id: "homebody",
+            tab: "恋家",
+            title: "最恋家的星座",
+            desc: "外面的世界再精彩，也比不过家里那盏留灯。",
+            range: [18560, 2250],
+            order: ["cancer", "taurus", "virgo", "pisces", "capricorn", "scorpio", "leo", "libra", "aries", "gemini", "aquarius", "sagittarius"],
+            insight: "巨蟹的归属感来自熟悉的人与空间；金牛在家具、食物和触感里建立安全感；处女把秩序感做成家的底色。"
+          },
+          {
+            id: "care",
+            tab: "照顾人",
+            title: "最会照顾人的星座",
+            desc: "照顾不是替对方做决定，而是提前想到它没说出口的需求。",
+            range: [18040, 2740],
+            order: ["cancer", "virgo", "taurus", "pisces", "capricorn", "libra", "scorpio", "leo", "aries", "gemini", "aquarius", "sagittarius"],
+            insight: "巨蟹的照顾带着情感温度；处女擅长把细节安排妥当；金牛不擅甜言蜜语，却会默默把生活打点得妥帖。"
+          },
+          {
+            id: "ritual",
+            tab: "生活仪式感",
+            title: "最有生活仪式感的星座",
+            desc: "它们相信，普通日子也值得被认真地庆祝。",
+            range: [17620, 2060],
+            order: ["libra", "leo", "pisces", "taurus", "virgo", "cancer", "scorpio", "sagittarius", "aries", "gemini", "capricorn", "aquarius"],
+            insight: "天秤在乎氛围与美感，最会把平凡时刻布置成纪念；狮子喜欢有仪式感的高光时刻；双鱼会给日常加上一点梦幻滤镜。"
+          },
+          {
+            id: "cooking",
+            tab: "做饭天赋",
+            title: "最有做饭天赋的星座",
+            desc: "厨房是另一种性格表达：有人靠天赋，有人靠精准。",
+            range: [17440, 2540],
+            order: ["taurus", "cancer", "virgo", "pisces", "libra", "capricorn", "scorpio", "leo", "aries", "gemini", "sagittarius", "aquarius"],
+            insight: "金牛对味道与食材的直觉往往在线；巨蟹擅长把关心煮进餐食；处女会严格控制火候与步骤，成品通常不会差。"
+          },
+          {
+            id: "elder-favor",
+            tab: "长辈缘",
+            title: "最有长辈缘的星座",
+            desc: "礼貌、稳重、嘴甜或可靠，总有一个理由让长辈格外喜欢。",
+            range: [17180, 2440],
+            order: ["cancer", "taurus", "libra", "virgo", "capricorn", "pisces", "leo", "gemini", "scorpio", "aries", "sagittarius", "aquarius"],
+            insight: "巨蟹自带亲切和照顾感；金牛沉稳有礼，让人放心；天秤懂分寸，会说话也不失礼数。"
+          }
+        ]
+      },
+      {
+        id: "social",
+        name: "社交磁场",
+        topics: [
+          {
+            id: "social",
+            tab: "社交达人",
+            title: "最擅长社交的星座",
+            desc: "它们不是最吵的人，却总能让场子舒服地运转起来。",
+            range: [19480, 3010],
+            order: ["libra", "gemini", "leo", "sagittarius", "aquarius", "pisces", "aries", "cancer", "scorpio", "capricorn", "virgo", "taurus"],
+            insight: "天秤擅长读取气氛，让每个人都体面；双子反应快、话题多，几乎不怕冷场；狮子有舞台感，也愿意照顾全场的情绪。"
+          },
+          {
+            id: "friendship",
+            tab: "讲义气",
+            title: "最讲义气的星座",
+            desc: "把朋友的事当自己的事，把「我罩你」落在行动上。",
+            range: [17840, 2530],
+            order: ["leo", "scorpio", "aries", "sagittarius", "cancer", "virgo", "capricorn", "pisces", "taurus", "libra", "gemini", "aquarius"],
+            insight: "狮子对圈内人有强烈的保护欲；天蝎认定朋友后会坚定站队；白羊的义气来得直接，朋友需要时可以立刻出现。"
+          },
+          {
+            id: "gullible",
+            tab: "容易被骗",
+            title: "最容易被骗的星座",
+            desc: "世界在它们眼里多半是善意的，这让骗子显得格外狡猾。",
+            range: [19320, 1380],
+            order: ["pisces", "aries", "cancer", "sagittarius", "libra", "leo", "gemini", "virgo", "taurus", "aquarius", "scorpio", "capricorn"],
+            insight: "双鱼容易共情对方的难处，也愿意再相信一次；白羊行动快于怀疑，常凭直觉先答应；巨蟹怕伤感情，不太擅长当面拒绝。"
+          },
+          {
+            id: "slow-reply",
+            tab: "不爱回消息",
+            title: "最不爱回消息的星座",
+            desc: "消息不是没看见，只是在脑海里排队时走丢了。",
+            range: [17620, 2820],
+            order: ["aquarius", "sagittarius", "capricorn", "scorpio", "gemini", "aries", "leo", "taurus", "virgo", "libra", "pisces", "cancer"],
+            insight: "水瓶容易沉浸在自己的频率里，回消息不是优先级；射手看到后想着「等会儿回」，然后就去忙别的了；摩羯常用「处理完正事再说」推迟社交回应。"
+          },
+          {
+            id: "awkward",
+            tab: "化解尴尬",
+            title: "最会化解尴尬的星座",
+            desc: "一句轻轻的圆场，能把所有人从脚趾抠地的瞬间救回来。",
+            range: [17540, 2120],
+            order: ["libra", "gemini", "sagittarius", "leo", "pisces", "aries", "aquarius", "cancer", "scorpio", "virgo", "capricorn", "taurus"],
+            insight: "天秤几乎是气氛的自动调音器；双子擅长转移话题与自嘲救场；射手用轻松和坦荡把尴尬笑笑带过。"
+          },
+          {
+            id: "comfort",
+            tab: "会安慰人",
+            title: "最会安慰人的星座",
+            desc: "它们未必给建议，但会先接住你的情绪。",
+            range: [18420, 3260],
+            order: ["pisces", "cancer", "libra", "virgo", "taurus", "leo", "scorpio", "sagittarius", "capricorn", "gemini", "aries", "aquarius"],
+            insight: "双鱼很能感受别人的难过，也愿意陪着沉入情绪；巨蟹会用实际的陪伴和照顾接住你；天秤懂得如何让人重新感到被尊重。"
+          }
+        ]
+      },
+      {
+        id: "wealth",
+        name: "财富事业",
+        topics: [
+          {
+            id: "saving",
+            tab: "会存钱",
+            title: "最会存钱的星座",
+            desc: "安全感可以来自拥抱，也可以来自账户里那笔不动用的余额。",
+            range: [19340, 3040],
+            order: ["taurus", "capricorn", "virgo", "cancer", "scorpio", "libra", "leo", "aquarius", "gemini", "pisces", "aries", "sagittarius"],
+            insight: "金牛重视物质的稳定与质感，存钱像本能；摩羯擅长长期规划，延迟满足是常态；处女会精细记录每一笔支出。"
+          },
+          {
+            id: "impulse-buy",
+            tab: "冲动消费",
+            title: "最容易冲动消费的星座",
+            desc: "购物车里的东西，有时不是需要，而是当下的心情。",
+            range: [18080, 3720],
+            order: ["sagittarius", "aries", "leo", "pisces", "gemini", "libra", "cancer", "scorpio", "aquarius", "virgo", "taurus", "capricorn"],
+            insight: "射手容易被新鲜目的地和体验感推着走；白羊决策快，喜欢先拥有再说；狮子则为质感和「值得」买单。"
+          },
+          {
+            id: "money",
+            tab: "搞钱能力",
+            title: "最会搞钱的星座",
+            desc: "野心、资源感与执行力，决定它们如何把机会变成收入。",
+            range: [19460, 2280],
+            order: ["capricorn", "scorpio", "taurus", "virgo", "leo", "aries", "gemini", "libra", "aquarius", "cancer", "sagittarius", "pisces"],
+            insight: "摩羯擅长把目标拆解成可执行的路径；天蝎对资源与趋势有敏锐嗅觉；金牛懂得让价值慢慢沉淀。"
+          },
+          {
+            id: "ambition",
+            tab: "事业心",
+            title: "最有事业心的星座",
+            desc: "不一定最张扬，但一定要把想做的事做到有分量。",
+            range: [19560, 2060],
+            order: ["capricorn", "leo", "scorpio", "aries", "virgo", "taurus", "libra", "cancer", "aquarius", "gemini", "sagittarius", "pisces"],
+            insight: "摩羯把责任与成就看作自我证明；狮子需要被看见，也愿意承担舞台中央的压力；天蝎一旦锁定目标，就会把力气用在关键处。"
+          },
+          {
+            id: "startup",
+            tab: "适合创业",
+            title: "最适合创业的星座",
+            desc: "从 0 到 1 需要的不是完美计划，而是敢先迈出去的那一步。",
+            range: [18620, 2560],
+            order: ["aries", "capricorn", "leo", "sagittarius", "aquarius", "scorpio", "gemini", "taurus", "virgo", "libra", "cancer", "pisces"],
+            insight: "白羊敢开局，行动力就是最大的本钱；摩羯能把冲劲变成组织与结果；狮子擅长立愿景、聚人心，适合站在品牌与团队前面。"
+          },
+          {
+            id: "finance",
+            tab: "理财头脑",
+            title: "最有理财头脑的星座",
+            desc: "会赚是一回事，能看懂现金流、风险与周期是另一回事。",
+            range: [18160, 2780],
+            order: ["capricorn", "taurus", "virgo", "scorpio", "cancer", "libra", "aquarius", "leo", "gemini", "sagittarius", "aries", "pisces"],
+            insight: "摩羯对长期回报与风险有耐心；金牛偏好看得见摸得着的稳健资产；处女会做足功课，不轻易被高收益故事带走。"
+          }
+        ]
+      },
+      {
+        id: "life",
+        name: "生活天赋",
+        topics: [
+          {
+            id: "art",
+            tab: "艺术天赋",
+            title: "最有艺术天赋的星座",
+            desc: "感知力越细，越能把看不见的情绪变成看得见的表达。",
+            range: [19380, 2980],
+            order: ["pisces", "libra", "leo", "scorpio", "gemini", "aquarius", "cancer", "virgo", "sagittarius", "aries", "taurus", "capricorn"],
+            insight: "双鱼的想象力与情绪感受力天生适合创作；天秤拥有敏锐的美感与比例感；狮子擅长把自我表达变成有感染力的作品。"
+          },
+          {
+            id: "late",
+            tab: "容易迟到",
+            title: "最容易迟到的星座",
+            desc: "它们不是不重视，只是出门前总觉得「还来得及」。",
+            range: [17040, 2280],
+            order: ["sagittarius", "pisces", "gemini", "libra", "aries", "leo", "aquarius", "cancer", "scorpio", "virgo", "taurus", "capricorn"],
+            insight: "射手的时间感常常让位于当下的兴致；双鱼容易在出门前陷入最后一分钟的幻想或找东西；双子则可能被一条消息带走十分钟。"
+          },
+          {
+            id: "organize",
+            tab: "整理收纳",
+            title: "最会整理收纳的星座",
+            desc: "收纳的不是物品，是一种「我知道东西在哪里」的心安。",
+            range: [19020, 2660],
+            order: ["virgo", "capricorn", "taurus", "cancer", "scorpio", "libra", "leo", "aquarius", "gemini", "pisces", "aries", "sagittarius"],
+            insight: "处女对分类与秩序有近乎本能的敏感；摩羯喜欢系统化，东西必须有固定位置；金牛重视舒适与稳定，也愿意认真布置自己的空间。"
+          },
+          {
+            id: "enjoy-life",
+            tab: "享受生活",
+            title: "最懂享受生活的星座",
+            desc: "会过日子的人，知道一顿好饭、一次日落也值得停下。",
+            range: [18740, 2540],
+            order: ["taurus", "libra", "leo", "pisces", "sagittarius", "gemini", "cancer", "scorpio", "aries", "virgo", "aquarius", "capricorn"],
+            insight: "金牛最懂五感带来的踏实快乐；天秤需要美的环境与舒服的关系；狮子喜欢把生活过得有仪式、有光彩。"
+          },
+          {
+            id: "surprise",
+            tab: "制造惊喜",
+            title: "最会制造惊喜的星座",
+            desc: "它们愿意花心思，让你在毫无准备的时候被认真对待。",
+            range: [18220, 2680],
+            order: ["leo", "pisces", "libra", "sagittarius", "gemini", "aries", "cancer", "scorpio", "virgo", "taurus", "aquarius", "capricorn"],
+            insight: "狮子擅长制造高光与被重视的感觉；双鱼会记住你随口提过的小愿望；天秤的惊喜通常体面又照顾到所有细节。"
+          },
+          {
+            id: "photo",
+            tab: "拍照审美",
+            title: "最会拍照的星座",
+            desc: "构图、光线和情绪，都是它们记录生活的方式。",
+            range: [17380, 3040],
+            order: ["libra", "pisces", "leo", "gemini", "virgo", "sagittarius", "scorpio", "cancer", "aquarius", "aries", "taurus", "capricorn"],
+            insight: "天秤对构图和色彩自带审美雷达；双鱼擅长捕捉情绪与氛围；狮子知道如何让画面有主角感。"
+          }
+        ]
+      }
+    ];
+
+    const SIGN_MAP = new Map(SIGNS.map((sign) => [sign.key, sign]));
+    const GROUP_MAP = new Map(GROUPS.map((group) => [group.id, group]));
+    const TOPIC_ENTRIES = GROUPS.flatMap((group) => group.topics.map((topic) => ({ group, topic })));
+    const TOPIC_MAP = new Map(TOPIC_ENTRIES.map(({ group, topic }) => [topic.id, { group, topic }]));
+    const MAX_SCORE = 20000;
+    const FIXED_ORDER = SIGNS.map((sign) => sign.key);
+    const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const CUSTOM_TRAITS = [
+      { id: "logic", label: "逻辑思维", order: ["virgo", "aquarius", "capricorn", "gemini", "scorpio", "taurus", "libra", "leo", "sagittarius", "pisces", "cancer", "aries"] },
+      { id: "tech", label: "科技直觉", order: ["aquarius", "gemini", "virgo", "capricorn", "sagittarius", "scorpio", "aries", "libra", "leo", "taurus", "pisces", "cancer"] },
+      { id: "creativity", label: "灵感创意", order: ["pisces", "aquarius", "leo", "gemini", "sagittarius", "libra", "scorpio", "cancer", "aries", "taurus", "virgo", "capricorn"] },
+      { id: "leadership", label: "领导力", order: ["leo", "capricorn", "aries", "scorpio", "sagittarius", "virgo", "taurus", "libra", "aquarius", "cancer", "gemini", "pisces"] },
+      { id: "discipline", label: "自律力", order: ["capricorn", "virgo", "taurus", "scorpio", "aries", "leo", "aquarius", "cancer", "libra", "sagittarius", "gemini", "pisces"] },
+      { id: "morning", label: "早起体质", order: ["aries", "capricorn", "virgo", "leo", "taurus", "libra", "gemini", "cancer", "scorpio", "aquarius", "sagittarius", "pisces"] },
+      { id: "night", label: "夜猫子", order: ["pisces", "scorpio", "aquarius", "gemini", "cancer", "libra", "leo", "sagittarius", "virgo", "taurus", "aries", "capricorn"] },
+      { id: "sleep", label: "睡眠质量", order: ["taurus", "cancer", "pisces", "libra", "leo", "virgo", "scorpio", "aquarius", "sagittarius", "gemini", "aries", "capricorn"] },
+      { id: "humor", label: "幽默感", order: ["gemini", "sagittarius", "leo", "aries", "libra", "aquarius", "pisces", "cancer", "scorpio", "taurus", "virgo", "capricorn"] },
+      { id: "empathy", label: "共情力", order: ["pisces", "cancer", "scorpio", "libra", "virgo", "taurus", "leo", "aquarius", "gemini", "sagittarius", "capricorn", "aries"] },
+      { id: "social", label: "社交能量", order: ["libra", "gemini", "leo", "sagittarius", "aquarius", "aries", "taurus", "cancer", "pisces", "virgo", "capricorn", "scorpio"] },
+      { id: "solitude", label: "独处需求", order: ["capricorn", "scorpio", "virgo", "taurus", "aquarius", "cancer", "pisces", "libra", "leo", "aries", "gemini", "sagittarius"] },
+      { id: "patience", label: "耐心值", order: ["taurus", "virgo", "capricorn", "cancer", "pisces", "libra", "scorpio", "aquarius", "leo", "sagittarius", "gemini", "aries"] },
+      { id: "impulse", label: "行动冲动", order: ["aries", "sagittarius", "gemini", "leo", "libra", "pisces", "cancer", "scorpio", "taurus", "aquarius", "virgo", "capricorn"] },
+      { id: "adventure", label: "冒险精神", order: ["sagittarius", "aries", "aquarius", "gemini", "leo", "scorpio", "libra", "pisces", "cancer", "virgo", "taurus", "capricorn"] },
+      { id: "family", label: "家庭感", order: ["cancer", "taurus", "virgo", "capricorn", "pisces", "scorpio", "leo", "libra", "aries", "gemini", "aquarius", "sagittarius"] },
+      { id: "romance", label: "浪漫细胞", order: ["pisces", "libra", "leo", "cancer", "taurus", "sagittarius", "scorpio", "gemini", "aries", "aquarius", "virgo", "capricorn"] },
+      { id: "pet", label: "宠物缘", order: ["cancer", "virgo", "pisces", "taurus", "libra", "leo", "sagittarius", "aries", "gemini", "scorpio", "aquarius", "capricorn"] },
+      { id: "money", label: "金钱敏感度", order: ["taurus", "capricorn", "virgo", "scorpio", "cancer", "libra", "leo", "aquarius", "gemini", "pisces", "aries", "sagittarius"] },
+      { id: "luck", label: "偏财运", order: ["sagittarius", "pisces", "leo", "taurus", "libra", "aries", "gemini", "cancer", "scorpio", "aquarius", "virgo", "capricorn"] },
+      { id: "healing", label: "治愈力", order: ["pisces", "cancer", "libra", "taurus", "virgo", "leo", "scorpio", "sagittarius", "aquarius", "gemini", "aries", "capricorn"] },
+      { id: "aesthetics", label: "审美力", order: ["libra", "taurus", "pisces", "leo", "virgo", "aquarius", "sagittarius", "gemini", "cancer", "scorpio", "aries", "capricorn"] },
+      { id: "curiosity", label: "好奇心", order: ["gemini", "sagittarius", "aquarius", "aries", "libra", "leo", "pisces", "scorpio", "virgo", "cancer", "taurus", "capricorn"] },
+      { id: "rebellion", label: "叛逆值", order: ["aquarius", "aries", "sagittarius", "scorpio", "gemini", "leo", "libra", "pisces", "cancer", "virgo", "taurus", "capricorn"] },
+      { id: "perfectionism", label: "完美主义", order: ["virgo", "capricorn", "scorpio", "taurus", "libra", "leo", "aquarius", "cancer", "pisces", "gemini", "sagittarius", "aries"] },
+      { id: "detail", label: "细节控", order: ["virgo", "taurus", "scorpio", "capricorn", "cancer", "libra", "pisces", "aquarius", "leo", "gemini", "sagittarius", "aries"] },
+      { id: "organization", label: "收纳力", order: ["virgo", "capricorn", "taurus", "libra", "cancer", "scorpio", "leo", "aquarius", "pisces", "aries", "gemini", "sagittarius"] },
+      { id: "communication", label: "表达力", order: ["gemini", "libra", "leo", "sagittarius", "aquarius", "aries", "pisces", "cancer", "virgo", "taurus", "scorpio", "capricorn"] },
+      { id: "charm", label: "魅力值", order: ["libra", "leo", "scorpio", "pisces", "taurus", "gemini", "sagittarius", "cancer", "aries", "aquarius", "virgo", "capricorn"] },
+      { id: "intuition", label: "直觉力", order: ["pisces", "scorpio", "cancer", "sagittarius", "aquarius", "libra", "virgo", "leo", "taurus", "aries", "gemini", "capricorn"] },
+      { id: "resilience", label: "抗压力", order: ["capricorn", "scorpio", "taurus", "aries", "leo", "virgo", "aquarius", "sagittarius", "cancer", "libra", "pisces", "gemini"] },
+      { id: "calm", label: "情绪稳定", order: ["capricorn", "taurus", "virgo", "libra", "aquarius", "leo", "scorpio", "cancer", "pisces", "sagittarius", "gemini", "aries"] },
+      { id: "practicality", label: "务实度", order: ["capricorn", "virgo", "taurus", "scorpio", "cancer", "libra", "aries", "leo", "aquarius", "gemini", "sagittarius", "pisces"] },
+      { id: "adaptability", label: "应变力", order: ["gemini", "sagittarius", "libra", "aquarius", "aries", "pisces", "cancer", "leo", "virgo", "scorpio", "taurus", "capricorn"] },
+      { id: "cooking", label: "厨艺", order: ["taurus", "cancer", "virgo", "libra", "pisces", "leo", "capricorn", "scorpio", "sagittarius", "aquarius", "gemini", "aries"] },
+      { id: "fitness", label: "运动天赋", order: ["aries", "sagittarius", "leo", "scorpio", "capricorn", "taurus", "gemini", "aquarius", "virgo", "libra", "pisces", "cancer"] },
+      { id: "gaming", label: "游戏天赋", order: ["gemini", "aquarius", "aries", "scorpio", "sagittarius", "leo", "virgo", "libra", "pisces", "cancer", "taurus", "capricorn"] },
+      { id: "learning", label: "学习力", order: ["virgo", "gemini", "capricorn", "scorpio", "aquarius", "sagittarius", "taurus", "libra", "leo", "cancer", "pisces", "aries"] },
+      { id: "debate", label: "辩论力", order: ["gemini", "libra", "sagittarius", "aquarius", "aries", "leo", "virgo", "scorpio", "capricorn", "cancer", "pisces", "taurus"] },
+      { id: "risk", label: "风险偏好", order: ["aries", "sagittarius", "leo", "gemini", "aquarius", "scorpio", "libra", "pisces", "cancer", "taurus", "virgo", "capricorn"] },
+      { id: "nostalgia", label: "怀旧感", order: ["cancer", "taurus", "pisces", "virgo", "scorpio", "capricorn", "libra", "leo", "aries", "gemini", "aquarius", "sagittarius"] },
+      { id: "mystery", label: "神秘感", order: ["scorpio", "pisces", "capricorn", "aquarius", "virgo", "cancer", "taurus", "libra", "leo", "gemini", "sagittarius", "aries"] },
+      { id: "optimism", label: "乐观值", order: ["sagittarius", "leo", "aries", "gemini", "libra", "pisces", "aquarius", "taurus", "cancer", "scorpio", "virgo", "capricorn"] },
+      { id: "sensitivity", label: "敏感度", order: ["cancer", "pisces", "scorpio", "virgo", "libra", "taurus", "leo", "aquarius", "gemini", "aries", "sagittarius", "capricorn"] },
+      { id: "daydream", label: "白日梦", order: ["pisces", "cancer", "libra", "sagittarius", "gemini", "leo", "aquarius", "scorpio", "taurus", "virgo", "aries", "capricorn"] },
+      { id: "anger", label: "脾气值", order: ["aries", "leo", "scorpio", "sagittarius", "gemini", "cancer", "taurus", "capricorn", "libra", "pisces", "aquarius", "virgo"] },
+      { id: "forgiveness", label: "宽容度", order: ["pisces", "libra", "sagittarius", "cancer", "gemini", "leo", "aquarius", "taurus", "virgo", "scorpio", "capricorn", "aries"] },
+      { id: "procrastination", label: "拖延症", order: ["pisces", "libra", "gemini", "sagittarius", "cancer", "leo", "taurus", "aquarius", "aries", "scorpio", "virgo", "capricorn"] },
+      { id: "punctuality", label: "守时力", order: ["virgo", "capricorn", "taurus", "aries", "leo", "scorpio", "libra", "cancer", "aquarius", "gemini", "sagittarius", "pisces"] },
+      { id: "acting", label: "表演天赋", order: ["pisces", "leo", "scorpio", "gemini", "libra", "cancer", "sagittarius", "aquarius", "virgo", "taurus", "aries", "capricorn"] },
+      { id: "singing", label: "唱歌天赋", order: ["leo", "pisces", "libra", "taurus", "cancer", "gemini", "sagittarius", "scorpio", "aries", "aquarius", "virgo", "capricorn"] },
+      { id: "dancing", label: "舞蹈天赋", order: ["leo", "libra", "sagittarius", "pisces", "gemini", "aries", "taurus", "scorpio", "cancer", "aquarius", "virgo", "capricorn"] },
+      { id: "writing", label: "写作天赋", order: ["pisces", "gemini", "virgo", "scorpio", "libra", "sagittarius", "cancer", "aquarius", "leo", "taurus", "aries", "capricorn"] },
+      { id: "parenting", label: "带娃力", order: ["cancer", "virgo", "taurus", "capricorn", "pisces", "libra", "leo", "scorpio", "sagittarius", "aries", "gemini", "aquarius"] },
+      { id: "teaching", label: "教学力", order: ["virgo", "cancer", "capricorn", "libra", "pisces", "sagittarius", "taurus", "leo", "aquarius", "gemini", "scorpio", "aries"] },
+      { id: "control", label: "控制欲", order: ["scorpio", "capricorn", "leo", "taurus", "virgo", "aries", "cancer", "aquarius", "libra", "pisces", "sagittarius", "gemini"] },
+      { id: "navigation", label: "方向感", order: ["virgo", "capricorn", "taurus", "scorpio", "leo", "aries", "libra", "aquarius", "cancer", "gemini", "sagittarius", "pisces"] },
+      { id: "replySpeed", label: "回消息速度", order: ["cancer", "pisces", "libra", "virgo", "taurus", "leo", "aries", "gemini", "scorpio", "capricorn", "sagittarius", "aquarius"] }
+    ];
+
+    const TOPIC_ALIASES = {
+      marriage: ["忠诚", "结婚", "专一"],
+      jealousy: ["吃醋", "占有欲"],
+      "first-sight": ["一见钟情", "心动"],
+      coquettish: ["撒娇"],
+      "cold-war": ["冷战"],
+      "love-brain": ["恋爱脑", "黏人"],
+      grudge: ["记仇", "翻旧账"],
+      "tough-soft": ["嘴硬心软", "嘴硬", "傲娇"],
+      overthinking: ["内耗", "想太多"],
+      freedom: ["自由"],
+      honesty: ["诚实", "坦率", "直说"],
+      stubborn: ["固执", "倔强"],
+      filial: ["孝顺", "孝心"],
+      homebody: ["恋家", "宅家"],
+      care: ["照顾人", "照顾"],
+      ritual: ["仪式感"],
+      cooking: ["做饭", "厨艺", "下厨"],
+      "elder-favor": ["长辈缘", "讨长辈喜欢"],
+      social: ["社交", "人缘"],
+      friendship: ["讲义气", "义气"],
+      gullible: ["容易被骗", "被骗", "好骗", "上当"],
+      awkward: ["化解尴尬", "尴尬", "圆场"],
+      comfort: ["安慰", "哄人"],
+      saving: ["存钱", "攒钱", "省钱"],
+      "impulse-buy": ["冲动消费", "剁手"],
+      money: ["搞钱", "赚钱"],
+      ambition: ["事业心", "事业"],
+      startup: ["创业"],
+      finance: ["理财", "投资"],
+      art: ["艺术", "画画"],
+      late: ["迟到"],
+      organize: ["收纳", "整理"],
+      "enjoy-life": ["享受生活", "会生活", "懂生活"],
+      surprise: ["惊喜"],
+      photo: ["拍照", "摄影", "照片"]
+    };
+
+    const CUSTOM_RULES = [
+      { keys: ["写代码", "编程", "程序员", "代码", "开发", "工程师", "debug", "bug"], traits: [["tech", 1.15], ["logic", 0.9], ["detail", 0.4]], label: "代码" },
+      { keys: ["算法", "数学", "理科", "逻辑", "理性", "推理"], traits: [["logic", 1.3], ["detail", 0.35]], label: "逻辑" },
+      { keys: ["失眠", "睡不着", "熬夜", "夜猫子", "通宵", "晚睡"], traits: [["night", 1.2], ["topic:overthinking", 0.75], ["sensitivity", 0.35]], label: "夜间活跃" },
+      { keys: ["早起", "晨型", "早上起", "不赖床"], traits: [["morning", 1.25], ["discipline", 0.5]], label: "早起" },
+      { keys: ["赖床", "起床困难", "起床费劲"], traits: [["morning", 1.2]], label: "起床", invert: true },
+      { keys: ["领导", "管理", "带团队", "当老板", "统筹", "决策"], traits: [["leadership", 1.25], ["topic:ambition", 0.65], ["control", 0.3]], label: "领导力" },
+      { keys: ["时间管理"], traits: [["discipline", 1.2], ["organization", 0.8]], label: "时间管理" },
+      { keys: ["情绪管理", "情绪稳定"], traits: [["calm", 1.3], ["resilience", 0.5]], label: "情绪稳定" },
+      { keys: ["宠物", "养猫", "养狗", "小动物", "撸猫", "撸狗"], traits: [["pet", 1.25], ["topic:care", 0.55], ["patience", 0.35]], label: "宠物缘" },
+      { keys: ["猫系", "像猫", "猫一样", "猫性"], traits: [["mystery", 0.7], ["solitude", 0.8], ["charm", 0.6], ["aesthetics", 0.4]], label: "猫系" },
+      { keys: ["狗系", "像狗", "犬系", "狗一样"], traits: [["topic:friendship", 0.7], ["social", 0.7], ["optimism", 0.6], ["family", 0.3]], label: "狗系" },
+      { keys: ["彩票", "中奖", "偏财", "锦鲤", "抽奖", "发财", "幸运", "运气", "欧皇", "抽卡"], traits: [["luck", 1.35], ["risk", 0.35]], label: "偏财运" },
+      { keys: ["倒霉", "非酋", "运气差"], traits: [["luck", 1.25]], label: "运气", invert: true },
+      { keys: ["赚钱", "搞钱", "收入", "财富", "致富"], traits: [["topic:money", 1.2], ["money", 0.6], ["topic:ambition", 0.35]], label: "搞钱" },
+      { keys: ["有钱", "富有", "暴富", "最富", "首富", "财富自由", "富二代"], traits: [["money", 1], ["topic:money", 1], ["luck", 0.35]], label: "财富" },
+      { keys: ["存钱", "攒钱", "省钱"], traits: [["topic:saving", 1.25], ["money", 0.5], ["discipline", 0.35]], label: "储蓄" },
+      { keys: ["月光", "负债", "负债累累"], traits: [["topic:saving", 1.1], ["impulse", 0.5, true]], label: "储蓄", invert: true },
+      { keys: ["花钱", "消费", "购物", "剁手"], traits: [["topic:impulse-buy", 1.2], ["impulse", 0.5]], label: "消费冲动" },
+      { keys: ["理财", "投资", "股票", "基金", "炒股", "买房"], traits: [["topic:finance", 1.25], ["money", 0.4]], label: "理财" },
+      { keys: ["砍价", "讲价", "薅羊毛"], traits: [["money", 0.8], ["communication", 0.75], ["topic:saving", 0.45]], label: "省钱" },
+      { keys: ["创业", "做生意", "开店", "商业"], traits: [["topic:startup", 1.25], ["risk", 0.55], ["topic:ambition", 0.4]], label: "创业" },
+      { keys: ["学习", "考试", "学霸", "成绩", "备考", "读书", "背单词", "背课文"], traits: [["learning", 1.2], ["discipline", 0.55], ["detail", 0.3]], label: "学习" },
+      { keys: ["逢考必过", "考试运"], traits: [["luck", 1.1], ["learning", 0.8]], label: "考试运" },
+      { keys: ["科研", "研究"], traits: [["logic", 0.9], ["detail", 0.8], ["discipline", 0.6]], label: "科研" },
+      { keys: ["运动", "健身", "体育", "跑步", "游泳", "打球"], traits: [["fitness", 1.25], ["discipline", 0.45]], label: "运动" },
+      { keys: ["唱歌", "歌喉"], traits: [["singing", 1.3], ["creativity", 0.3]], label: "唱歌" },
+      { keys: ["跳舞", "舞蹈"], traits: [["dancing", 1.3], ["charm", 0.3]], label: "舞蹈" },
+      { keys: ["写作", "文案", "小说", "文笔", "文章"], traits: [["writing", 1.3], ["communication", 0.35]], label: "写作" },
+      { keys: ["写字", "书法", "字迹"], traits: [["writing", 1.3], ["detail", 0.2]], label: "文笔" },
+      { keys: ["拍照", "摄影", "出片", "照片", "修图"], traits: [["topic:photo", 1.15], ["aesthetics", 0.55]], label: "拍照审美" },
+      { keys: ["游戏", "电竞", "打游戏", "玩游戏", "打牌", "麻将"], traits: [["gaming", 1.35], ["tech", 0.3]], label: "游戏" },
+      { keys: ["幽默", "搞笑", "段子", "整活", "开心果", "笑点", "暖场"], traits: [["humor", 1.25], ["communication", 0.4]], label: "幽默" },
+      { keys: ["社交", "人缘", "合群", "社牛", "自来熟", "交际", "外向"], traits: [["topic:social", 1.15], ["social", 0.5], ["charm", 0.3]], label: "社交" },
+      { keys: ["社恐", "社交恐惧", "社交焦虑", "独处", "内向"], traits: [["solitude", 1.25], ["sensitivity", 0.4]], label: "独处" },
+      { keys: ["怕孤独", "害怕孤独", "怕寂寞"], traits: [["social", 0.8], ["family", 0.7], ["sensitivity", 0.45]], label: "害怕孤独" },
+      { keys: ["孤独", "寂寞", "孤单"], traits: [["solitude", 1.1], ["mystery", 0.35], ["social", 0.5, true]], label: "孤独感" },
+      { keys: ["话痨", "聊天", "表达", "沟通", "说话", "嘴甜", "甜言蜜语"], traits: [["communication", 1.15], ["social", 0.4]], label: "表达" },
+      { keys: ["冷场", "冷幽默"], traits: [["social", 1.05], ["communication", 0.55]], label: "社交", invert: true },
+      { keys: ["救场", "圆场", "活跃气氛"], traits: [["topic:awkward", 1.15], ["adaptability", 0.5], ["communication", 0.4]], label: "救场" },
+      { keys: ["吵架", "辩论", "嘴炮", "抬杠", "毒舌", "怼人"], traits: [["debate", 1.2], ["anger", 0.45]], label: "辩论" },
+      { keys: ["脾气", "暴躁", "易怒", "生气", "发火", "情绪化"], traits: [["anger", 1.35], ["impulse", 0.4]], label: "脾气" },
+      { keys: ["温柔", "体贴", "贴心", "暖心", "照顾", "为别人着想"], traits: [["topic:care", 1.1], ["empathy", 0.6]], label: "照顾" },
+      { keys: ["善良", "心善", "善意", "人品好"], traits: [["empathy", 1.1], ["topic:care", 0.6], ["forgiveness", 0.35]], label: "善良" },
+      { keys: ["共情", "安慰", "倾听", "治愈", "哄人", "同理心"], traits: [["empathy", 1.05], ["topic:comfort", 0.9], ["healing", 0.5]], label: "共情力" },
+      { keys: ["恋爱脑"], traits: [["topic:love-brain", 1.3], ["romance", 0.35]], label: "恋爱脑" },
+      { keys: ["浪漫", "约会", "爱情", "恋爱", "心动", "谈恋爱", "桃花", "脱单"], traits: [["romance", 1.15], ["topic:love-brain", 0.5], ["charm", 0.25]], label: "浪漫" },
+      { keys: ["会撩", "撩人", "撩妹", "撩汉", "撩"], traits: [["charm", 1], ["romance", 0.8], ["communication", 0.45]], label: "撩人" },
+      { keys: ["结婚", "婚姻", "忠诚", "专一"], traits: [["topic:marriage", 1.25], ["family", 0.35]], label: "承诺" },
+      { keys: ["花心", "劈腿", "出轨", "分手"], traits: [["topic:marriage", 1.2]], label: "关系稳定", invert: true },
+      { keys: ["渣男", "渣女", "最渣", "渣"], traits: [["topic:marriage", 1.1, true], ["topic:honesty", 0.8, true], ["charm", 0.25]], label: "感情口碑" },
+      { keys: ["黏人", "粘人", "依赖"], traits: [["topic:love-brain", 0.9], ["romance", 0.6], ["family", 0.3]], label: "黏人" },
+      { keys: ["异地恋", "异国恋", "远距离恋爱"], traits: [["communication", 0.9], ["solitude", 0.7], ["topic:honesty", 0.5], ["romance", 0.4]], label: "异地恋" },
+      { keys: ["怀旧", "旧物", "前任", "复合"], traits: [["nostalgia", 1.2], ["romance", 0.35]], label: "怀旧" },
+      { keys: ["嘴硬心软", "傲娇"], traits: [["topic:tough-soft", 1.3]], label: "嘴硬心软" },
+      { keys: ["原谅", "宽容", "心软", "好哄"], traits: [["forgiveness", 1.25], ["empathy", 0.45]], label: "宽容" },
+      { keys: ["道歉", "认错", "反省"], traits: [["forgiveness", 0.85], ["empathy", 0.8], ["communication", 0.35]], label: "道歉力" },
+      { keys: ["拖延", "懒", "摆烂", "磨蹭", "摸鱼"], traits: [["procrastination", 1.35], ["impulse", 0.3]], label: "拖延" },
+      { keys: ["自律", "坚持", "执行力", "毅力", "听话"], traits: [["discipline", 1.25], ["resilience", 0.45]], label: "自律" },
+      { keys: ["耐心", "耐性"], traits: [["patience", 1.3]], label: "耐心" },
+      { keys: ["放弃"], traits: [["resilience", 1.1], ["discipline", 0.6]], label: "坚持", invert: true },
+      { keys: ["冒险", "旅行", "远方", "自由", "流浪", "爱玩", "会玩"], traits: [["adventure", 1.15], ["topic:freedom", 0.85], ["risk", 0.35]], label: "冒险" },
+      { keys: ["宅", "不出门", "居家", "顾家"], traits: [["topic:homebody", 1.1], ["family", 0.4], ["solitude", 0.3]], label: "居家" },
+      { keys: ["做饭", "下厨", "厨艺", "煮饭", "烧菜", "烘焙"], traits: [["topic:cooking", 1.2], ["cooking", 0.55]], label: "厨艺" },
+      { keys: ["家务", "打扫", "收纳", "整理", "布置", "收拾"], traits: [["topic:organize", 1.1], ["organization", 0.55]], label: "收纳" },
+      { keys: ["装修", "布置房间"], traits: [["aesthetics", 0.9], ["organization", 0.7], ["topic:homebody", 0.4]], label: "布置" },
+      { keys: ["细心", "细节控", "一丝不苟"], traits: [["detail", 1.2], ["organization", 0.4]], label: "细心" },
+      { keys: ["粗心", "马虎", "健忘"], traits: [["detail", 1.2], ["organization", 0.4]], label: "细心", invert: true },
+      { keys: ["勇敢", "胆大", "有勇气"], traits: [["risk", 0.9], ["adventure", 0.6], ["resilience", 0.3]], label: "勇气" },
+      { keys: ["胆小", "怂", "胆怯"], traits: [["risk", 1], ["resilience", 0.4], ["sensitivity", 0.3, true]], label: "胆量", invert: true },
+      { keys: ["哭", "泪点", "感性", "感动", "玻璃心"], traits: [["sensitivity", 1.15], ["empathy", 0.4]], label: "感受力" },
+      { keys: ["乐观", "正能量", "积极", "开心"], traits: [["optimism", 1.3], ["humor", 0.3]], label: "乐观" },
+      { keys: ["悲观", "焦虑", "内耗", "想太多", "emo"], traits: [["topic:overthinking", 1.15], ["sensitivity", 0.55]], label: "内耗" },
+      { keys: ["直觉", "第六感", "预感"], traits: [["intuition", 1.3]], label: "直觉" },
+      { keys: ["神秘", "高冷", "气场", "闷骚"], traits: [["mystery", 1.2], ["charm", 0.3]], label: "神秘感" },
+      { keys: ["颜值", "魅力", "吸引", "好看"], traits: [["charm", 1.25], ["aesthetics", 0.4]], label: "魅力" },
+      { keys: ["穿搭", "时尚", "审美", "化妆", "打扮"], traits: [["aesthetics", 1.3], ["charm", 0.3]], label: "审美" },
+      { keys: ["设计"], traits: [["aesthetics", 0.9], ["creativity", 0.8]], label: "设计感" },
+      { keys: ["演戏", "表演", "演技", "装"], traits: [["acting", 1.3], ["charm", 0.3]], label: "表演" },
+      { keys: ["孩子气"], traits: [["daydream", 0.8], ["humor", 0.7], ["impulse", 0.4]], label: "孩子气" },
+      { keys: ["幼稚", "不成熟"], traits: [["impulse", 0.8], ["humor", 0.6], ["daydream", 0.6], ["discipline", 0.5, true]], label: "幼稚" },
+      { keys: ["单纯", "天真"], traits: [["daydream", 0.8], ["forgiveness", 0.6], ["mystery", 0.4, true]], label: "单纯" },
+      { keys: ["带娃", "育儿", "小孩", "孩子", "教育"], traits: [["parenting", 1.3], ["topic:care", 0.4]], label: "带娃" },
+      { keys: ["老师", "教学", "教书", "教课"], traits: [["teaching", 1.2], ["communication", 0.4]], label: "教学" },
+      { keys: ["控制欲", "占有欲", "掌控", "管人"], traits: [["control", 1.25], ["topic:jealousy", 0.45]], label: "掌控欲" },
+      { keys: ["自恋", "自爱", "臭美", "爱自己"], traits: [["charm", 0.85], ["control", 0.35], ["topic:ambition", 0.3], ["optimism", 0.2]], label: "自恋" },
+      { keys: ["心机", "城府", "腹黑"], traits: [["mystery", 0.9], ["control", 0.7], ["logic", 0.3]], label: "心机" },
+      { keys: ["方向感", "认路"], traits: [["navigation", 1.3]], label: "方向感" },
+      { keys: ["路痴", "迷路"], traits: [["navigation", 1.3]], label: "方向感", invert: true },
+      { keys: ["应变", "适应", "变通", "临场发挥"], traits: [["adaptability", 1.3]], label: "应变力" },
+      { keys: ["智商", "聪明", "脑子", "学霸"], traits: [["logic", 0.9], ["learning", 0.9], ["adaptability", 0.4]], label: "脑力" },
+      { keys: ["情商", "会做人", "分寸", "读空气", "看眼色"], traits: [["empathy", 0.8], ["communication", 0.8], ["topic:awkward", 0.5]], label: "情商" },
+      { keys: ["靠谱", "可靠", "稳重", "成熟", "守信用", "言而有信", "信用"], traits: [["discipline", 0.9], ["punctuality", 0.8], ["resilience", 0.4]], label: "靠谱" },
+      { keys: ["朋友", "友谊", "交友", "义气"], traits: [["topic:friendship", 1.1], ["social", 0.4]], label: "朋友缘" },
+      { keys: ["睡觉", "贪睡", "睡神", "早睡"], traits: [["sleep", 1.1]], label: "睡眠" },
+      { keys: ["回消息", "秒回", "消息秒回"], traits: [["replySpeed", 1.2]], label: "回消息速度" },
+      { keys: ["已读不回", "不回消息", "轮回"], traits: [["replySpeed", 1.2]], label: "回消息速度", invert: true },
+      { keys: ["演讲", "发言", "谈判"], traits: [["communication", 1.05], ["leadership", 0.55]], label: "表达气场" },
+      { keys: ["面试", "求职"], traits: [["communication", 0.8], ["charm", 0.7], ["leadership", 0.45]], label: "面试表现" },
+      { keys: ["英语", "外语", "语言"], traits: [["learning", 0.95], ["communication", 0.7]], label: "语言" },
+      { keys: ["洁癖", "强迫症", "干净"], traits: [["organization", 1], ["perfectionism", 0.8]], label: "秩序感" },
+      { keys: ["吃货", "美食"], traits: [["cooking", 0.7], ["topic:enjoy-life", 0.6], ["impulse", 0.3]], label: "美食" },
+      { keys: ["沉默", "话少", "安静"], traits: [["communication", 1.1], ["solitude", 0.4, true]], label: "沉默", invert: true },
+      { keys: ["冷漠", "无情"], traits: [["empathy", 1.1]], label: "共情", invert: true },
+      { keys: ["音痴"], traits: [["singing", 1.2]], label: "音准", invert: true },
+      { keys: ["舞痴"], traits: [["dancing", 1.2]], label: "舞感", invert: true },
+      { keys: ["厨房杀手"], traits: [["topic:cooking", 1.2]], label: "厨艺", invert: true },
+      { keys: ["游戏黑洞"], traits: [["gaming", 1.2]], label: "游戏", invert: true },
+      { keys: ["运动废"], traits: [["fitness", 1.2]], label: "运动", invert: true },
+      { keys: ["考试焦虑"], traits: [["topic:overthinking", 0.9], ["sensitivity", 0.5]], label: "考试心态" },
+      { keys: ["财运"], traits: [["money", 0.8], ["luck", 0.6]], label: "财运" },
+      { keys: ["叛逆", "不听话"], traits: [["rebellion", 1.25]], label: "叛逆" },
+      { keys: ["佛系"], traits: [["topic:ambition", 1.1], ["optimism", 0.5, true]], label: "佛系", invert: true },
+      { keys: ["躺平"], traits: [["topic:ambition", 1.1], ["procrastination", 0.5, true]], label: "躺平", invert: true },
+      { keys: ["上进", "拼搏", "进取", "努力", "用功", "奋斗"], traits: [["topic:ambition", 1.1], ["discipline", 0.5]], label: "上进心" },
+      { keys: ["卷", "内卷", "加班", "升职"], traits: [["topic:ambition", 1.1], ["discipline", 0.8]], label: "事业心" },
+      { keys: ["独立"], traits: [["solitude", 0.9], ["resilience", 0.8]], label: "独立" },
+      { keys: ["慢热"], traits: [["patience", 0.7], ["mystery", 0.5], ["topic:tough-soft", 0.4]], label: "慢热" },
+      { keys: ["保守秘密", "守口如瓶"], traits: [["mystery", 0.8], ["topic:friendship", 0.7], ["discipline", 0.4]], label: "保密" },
+      { keys: ["撒谎", "骗人"], traits: [["topic:honesty", 1.1]], label: "诚实", invert: true },
+      { keys: ["坦白", "诚实", "直说"], traits: [["topic:honesty", 1.2]], label: "坦率" },
+      { keys: ["早到", "踩点", "守时", "准时"], traits: [["punctuality", 1.3]], label: "守时" },
+      { keys: ["迟到", "放鸽子", "磨蹭"], traits: [["topic:late", 1.2], ["procrastination", 0.4]], label: "迟到" },
+      { keys: ["做计划", "计划性", "规划"], traits: [["organization", 0.9], ["discipline", 0.8]], label: "计划性" },
+      { keys: ["临场", "救场"], traits: [["adaptability", 1.1]], label: "临场反应" },
+      { keys: ["梦想", "幻想", "白日梦", "发呆", "做梦"], traits: [["daydream", 1.25]], label: "白日梦" },
+      { keys: ["理想主义", "理想化", "乌托邦"], traits: [["daydream", 1], ["optimism", 0.7], ["practicality", 0.6, true]], label: "理想主义" },
+      { keys: ["现实", "务实"], traits: [["practicality", 1.25], ["daydream", 0.5, true]], label: "务实" },
+      { keys: ["幽默感", "笑点低"], traits: [["humor", 1.2], ["optimism", 0.3]], label: "笑点" },
+      { keys: ["领导力", "号召力"], traits: [["leadership", 1.3], ["charm", 0.4]], label: "领导力" },
+      { keys: ["亲和力"], traits: [["charm", 0.8], ["empathy", 0.7], ["topic:social", 0.5]], label: "亲和力" },
+      { keys: ["胜负欲", "好胜"], traits: [["topic:ambition", 0.9], ["anger", 0.5], ["impulse", 0.4]], label: "胜负欲" },
+      { keys: ["好奇心"], traits: [["curiosity", 1.3]], label: "好奇心" },
+      { keys: ["没安全感", "没有安全感", "缺乏安全感"], traits: [["sensitivity", 1], ["topic:jealousy", 0.6], ["family", 0.4]], label: "安全感" },
+      { keys: ["安全感"], traits: [["sensitivity", 0.9], ["topic:jealousy", 0.5], ["family", 0.4]], label: "安全感" },
+      { keys: ["仪式感"], traits: [["topic:ritual", 1.25], ["aesthetics", 0.3]], label: "仪式感" },
+      { keys: ["艺术感", "艺术细胞"], traits: [["topic:art", 1.25], ["aesthetics", 0.3]], label: "艺术感" }
+    ];
+
+    const SIGN_NOTES = {
+      aries: "行动力与胜负欲都来得很直接",
+      taurus: "稳定感与耐力是它的底色",
+      gemini: "信息量与思维转速总是领先一步",
+      cancer: "归属感与情绪温度是它的坐标",
+      leo: "舞台感与保护欲同时在线",
+      virgo: "秩序感与细节雷达几乎从不关闭",
+      libra: "分寸感与审美感是它的舒适区",
+      scorpio: "真诚与边界感在它心里近乎绝对",
+      sagittarius: "远方与可能性是它的呼吸",
+      capricorn: "长期主义与责任感总是先于情绪",
+      aquarius: "独立视角与理性观察是它的默认设置",
+      pisces: "感受力与想象力像潮水一样充沛"
+    };
+
+    const NEGATIVE_RE = /(最不|没|没有|^不$|不擅长|不会|不爱|不喜欢|不能|不敢|做不到|不太|不常|不想|不愿|不适合|不容易|不易|讨厌|害怕|恐惧|缺乏|不善|困难|抗拒|拒绝)/;
+    const CURATED_TRAITS = TOPIC_ENTRIES.map(({ topic }) => ({
+      id: `topic:${topic.id}`,
+      label: topic.tab,
+      order: topic.order
+    }));
+    const TRAIT_MAP = new Map([...CURATED_TRAITS, ...CUSTOM_TRAITS].map((trait) => [trait.id, trait]));
+
+    const state = {
+      mode: "curated",
+      groupId: GROUPS[0].id,
+      topicId: GROUPS[0].topics[0].id,
+      customTopic: null,
+      sortByRank: false,
+      renderToken: 0,
+      timers: []
+    };
+
+    const els = {
+      groupBar: document.getElementById("groupBar"),
+      topicBar: document.getElementById("topicBar"),
+      chartRegion: document.getElementById("chartRegion"),
+      chartScroll: document.getElementById("chartScroll"),
+      chartNo: document.getElementById("chartNo"),
+      chartGroup: document.getElementById("chartGroup"),
+      topicTitle: document.getElementById("topicTitle"),
+      topicDesc: document.getElementById("topicDesc"),
+      barLayer: document.getElementById("barLayer"),
+      xAxis: document.getElementById("xAxis"),
+      top3: document.getElementById("top3"),
+      insightText: document.getElementById("insightText"),
+      sortBtn: document.getElementById("sortBtn"),
+      sortLabel: document.getElementById("sortLabel"),
+      replayBtn: document.getElementById("replayBtn"),
+      chartCard: document.querySelector(".chart-card"),
+      customToggle: document.getElementById("customToggle"),
+      customToggleLabel: document.getElementById("customToggleLabel"),
+      customPanel: document.getElementById("customPanel"),
+      customForm: document.getElementById("customForm"),
+      customInput: document.getElementById("customInput"),
+      customError: document.getElementById("customError")
+    };
+
+    function hash01(input) {
+      let hash = 2166136261;
+      for (let i = 0; i < input.length; i += 1) {
+        hash ^= input.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      hash ^= hash >>> 16;
+      hash = Math.imul(hash, 2246822507);
+      hash ^= hash >>> 13;
+      hash = Math.imul(hash, 3266489909);
+      hash ^= hash >>> 16;
+      return (hash >>> 0) / 4294967295;
+    }
+
+    function scoreFor(topic, signKey, rank) {
+      const [top, bottom] = topic.range;
+      const exponent = 0.82 + hash01(topic.id + "curve") * 0.24;
+      const curve = Math.pow(1 - rank / 11, exponent);
+      let score = bottom + (top - bottom) * curve;
+
+      if (rank > 0 && rank < 11) {
+        const jitter = (hash01(topic.id + signKey) - 0.5) * (top - bottom) * 0.012;
+        score += jitter;
+      }
+
+      return Math.round(score / 10) * 10;
+    }
+
+    function buildRanking(topic) {
+      return topic.order.map((key, rank) => {
+        const sign = SIGN_MAP.get(key);
+        return { ...sign, rank, score: scoreFor(topic, key, rank) };
+      });
+    }
+
+    function activeTopic() {
+      return state.mode === "custom" && state.customTopic
+        ? state.customTopic
+        : TOPIC_MAP.get(state.topicId).topic;
+    }
+
+    function normalizePrompt(raw) {
+      let text = String(raw || "").replace(/\s+/g, " ").trim();
+      text = text.replace(/^(我想看|想看|帮我生成|生成|看看|来一个)[:：\s]*/, "").trim();
+      text = text.replace(/^[「『"'“”]+|[」』"'“”]+$/g, "");
+      text = text.replace(/[。！!？?，,；;：:、]+$/g, "");
+      return text.trim();
+    }
+
+    function customPromptError(prompt) {
+      if (!prompt) {
+        return "先写下你想看的维度，比如「最会写代码」。";
+      }
+      if (prompt.length > 30) {
+        return "最多 30 个字，浓缩一点再试试。";
+      }
+      if (/^(最|星座|谁|哪个|哪一个|哪个星座)$/.test(prompt)) {
+        return "再具体一点，比如「最会写代码」或「最容易失眠」。";
+      }
+      return "";
+    }
+
+    function makeCustomTitle(prompt) {
+      let core = prompt
+        .replace(/十二星座/g, "")
+        .replace(/^(哪个|哪一个|哪位|谁)/, "")
+        .replace(/星座/g, "")
+        .trim();
+
+      core = core.replace(/的?人$/, "").replace(/的$/, "").trim();
+      if (!core) {
+        core = prompt;
+      }
+
+      if (!/^最/.test(core)) {
+        const skill = /^(会|能|懂|写|拍|做|说|交|存|花|赚钱|省钱|养|带|学|考|唱|跳|画|玩|打|跑|煮|整理|收纳|照顾|管理|领导|抗|哄|撩|聊|穿)/;
+        const state = /^(爱|喜欢|擅长|适合|容易|常|经常|不|有|敢|总|想|需要|离不开|怕|讨厌|吃|睡|熬|早|晚|高|低|胖|瘦|美|漂亮|帅|可爱|聪明|靠谱|稳重|自律|独立|黏|粘|懒|佛|卷|社|内|外|乐|悲|敏|理|感|浪|现|务|靠|诚|坦|固|倔|勤|忙|闲|甜|酷|暖|冷|稳|善良)/;
+
+        if (/^像/.test(core)) {
+          core = `最${core}`;
+        } else if (/^当/.test(core)) {
+          core = `最适合${core}`;
+        } else if (/^(结婚|恋爱|脱单|创业|上班|理财)$/.test(core)) {
+          core = `最适合${core}`;
+        } else if (skill.test(core)) {
+          core = `最会${core}`;
+        } else if (state.test(core)) {
+          core = `最${core}`;
+        } else {
+          core = `最像${core}`;
+        }
+      }
+
+      core = core.replace(/^最最/, "最").replace(/的?人$/, "").trim();
+      core = core.replace(/的$/, "");
+
+      return {
+        core: `${core}的`,
+        title: `${core}的星座`
+      };
+    }
+
+    function customChipLabel(core) {
+      let label = core.replace(/的$/, "").replace(/^最/, "");
+      if (label.length > 10) {
+        label = `${label.slice(0, 10)}…`;
+      }
+      return `自由题 · ${label}`;
+    }
+
+    function setChartTitle(core) {
+      els.topicTitle.replaceChildren(document.createTextNode(core));
+      const suffix = document.createElement("em");
+      suffix.textContent = "星座";
+      els.topicTitle.appendChild(suffix);
+    }
+
+    function buildCustomTopic(prompt) {
+      const lower = prompt.toLowerCase();
+      let ruleText = lower;
+      const removals = [];
+      const contributions = [];
+
+      const sortedRules = CUSTOM_RULES
+        .flatMap((rule, ruleIndex) => rule.keys.map((key) => ({
+          rule,
+          ruleIndex,
+          key: key.toLowerCase()
+        })))
+        .sort((a, b) => b.key.length - a.key.length);
+
+      const usedRules = new Set();
+      sortedRules.forEach(({ rule, ruleIndex, key }) => {
+        if (!ruleText.includes(key)) {
+          return;
+        }
+
+        ruleText = ruleText.split(key).join("");
+        removals.push(key);
+
+        if (usedRules.has(ruleIndex)) {
+          return;
+        }
+        usedRules.add(ruleIndex);
+
+        rule.traits.forEach(([traitId, weight, traitInvert]) => {
+          if (!TRAIT_MAP.has(traitId)) {
+            return;
+          }
+          contributions.push({
+            traitId,
+            weight,
+            label: rule.label || rule.keys[0],
+            invert: Boolean(rule.invert) !== Boolean(traitInvert)
+          });
+        });
+      });
+
+      let autoText = ruleText;
+      TOPIC_ENTRIES.forEach(({ topic }) => {
+        const keys = [topic.tab, ...(TOPIC_ALIASES[topic.id] || [])];
+        const hits = keys.filter((key) => key && autoText.includes(key.toLowerCase()));
+        if (!hits.length) {
+          return;
+        }
+
+        hits.forEach((key) => {
+          const needle = key.toLowerCase();
+          autoText = autoText.split(needle).join("");
+          removals.push(needle);
+        });
+
+        contributions.push({
+          traitId: `topic:${topic.id}`,
+          weight: 1.2,
+          label: topic.tab,
+          invert: false
+        });
+      });
+
+      let scan = lower;
+      removals.forEach((key) => {
+        scan = scan.split(key).join("");
+      });
+      scan = scan.replace(/星座|[。！!？?，,；;：:、\s]/g, "");
+      const directionFlip = NEGATIVE_RE.test(scan) ? -1 : 1;
+      const fallback = contributions.length === 0;
+
+      if (fallback) {        const pool = ["charm", "communication", "resilience", "curiosity", "empathy", "optimism", "creativity", "adventure"];
+        const picked = pool
+          .map((traitId) => ({ traitId, score: hash01(`pick:${prompt}:${traitId}`) }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3);
+        picked.forEach(({ traitId }) => {
+          const trait = TRAIT_MAP.get(traitId);
+          contributions.push({
+            traitId,
+            weight: 0.65,
+            label: trait.label,
+            invert: false
+          });
+        });
+      }
+
+      const values = SIGNS.map((sign) => {
+        let total = 0;
+        let weightSum = 0;
+
+        contributions.forEach((contribution) => {
+          const trait = TRAIT_MAP.get(contribution.traitId);
+          const rank = trait ? trait.order.indexOf(sign.key) : -1;
+          if (rank < 0) {
+            return;
+          }
+
+          const affinity = 1 - rank / 11;
+          const direction = (contribution.invert ? -1 : 1) * directionFlip;
+          const value = direction === 1 ? affinity : 1 - affinity;
+          total += value * contribution.weight;
+          weightSum += contribution.weight;
+        });
+
+        const jitter = (hash01(`custom:${prompt}:${sign.key}`) - 0.5) * 0.022;
+        return {
+          key: sign.key,
+          value: weightSum ? total / weightSum + jitter : jitter
+        };
+      });
+
+      values.sort((a, b) => {
+        if (Math.abs(b.value - a.value) > 1e-9) {
+          return b.value - a.value;
+        }
+        return hash01(`tie:${prompt}:${a.key}`) - hash01(`tie:${prompt}:${b.key}`);
+      });
+
+      const order = values.map((entry) => entry.key);
+      const labelWeights = new Map();
+      contributions.forEach((contribution) => {
+        labelWeights.set(
+          contribution.label,
+          Math.max(labelWeights.get(contribution.label) || 0, contribution.weight)
+        );
+      });
+      const labels = [...labelWeights.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([label]) => label)
+        .slice(0, 6);
+
+      const titleInfo = makeCustomTitle(prompt);
+      const [first, second, third] = order.map((key) => SIGN_MAP.get(key));
+      const top = 17600 + Math.floor(hash01(`top:${prompt}`) * 14) * 100;
+      const bottom = 2000 + Math.floor(hash01(`bottom:${prompt}`) * 13) * 100;
+      const id = `custom-${Math.round(hash01(`id:${prompt}`) * 1e9).toString(36)}`;
+      const labelText = labels.slice(0, 3).map((label) => `「${label}」`).join("、") || "整体气质";
+      const reversedOverall = contributions.every((contribution) => (contribution.invert ? -1 : 1) * directionFlip === -1);
+      const directionText = reversedOverall ? "题目里的否定或反向表达，已经计入排序方向。" : "";
+
+      const desc = fallback
+        ? `暂无现成的统计答案。这份「${prompt}」图表由输入文本的确定性种子生成，用来演示一种看法，不代表调查结果。换一个更具体的说法，例如「最会写代码」或「最容易失眠」，会得到更有依据的排序。`
+        : `围绕「${prompt}」，关键词命中${labels.slice(0, 4).map((label) => `「${label}」`).join("、")}${labels.length > 4 ? "等线索" : ""}，再按四元素与性格原型合成排序。${directionText}数值只用于可视化，不是调查数据。`;
+
+      const insightLead = reversedOverall
+        ? `把「${prompt}」按${labelText}的反向着眼，`
+        : `把「${prompt}」拆成${labelText}来看，`;
+      const insight = fallback
+        ? `没有命中具体词库，排序由输入文本的确定性种子生成：${first.name}、${second.name}、${third.name}排在前三，纯属娱乐。可以试试「最会写代码」「最容易失眠」「最适合当领导」等具体问法。`
+        : `${insightLead}${first.name}的${SIGN_NOTES[first.key]}，因此排在首位；${second.name}的${SIGN_NOTES[second.key]}，紧随其后；${third.name}的${SIGN_NOTES[third.key]}，也让它进入前三。关键词联想与性格原型共同生成这份排序，仍属娱乐演绎。`;
+
+      return {
+        id,
+        tab: customChipLabel(titleInfo.core),
+        title: titleInfo.title,
+        desc,
+        range: [top, bottom],
+        order,
+        insight,
+        custom: {
+          prompt,
+          core: titleInfo.core,
+          labels,
+          fallback,
+          reversed: reversedOverall
+        }
+      };
+    }
+
+    function renderGroupBar() {
+      els.groupBar.innerHTML = GROUPS.map((group) => {
+        const active = state.mode === "curated" && group.id === state.groupId;
+        return `<button class="group-btn${active ? " active" : ""}" type="button" data-group="${group.id}" aria-pressed="${active}">
+          ${group.name}<span class="group-count">${String(group.topics.length).padStart(2, "0")}</span>
+        </button>`;
+      }).join("");
+    }
+
+    function renderTopicBar() {
+      const group = GROUP_MAP.get(state.groupId);
+      const fragment = document.createDocumentFragment();
+
+      group.topics.forEach((topic, index) => {
+        const button = document.createElement("button");
+        button.className = "topic-btn";
+        button.type = "button";
+        button.dataset.topic = topic.id;
+        button.setAttribute("aria-pressed", "false");
+
+        const number = document.createElement("span");
+        number.className = "topic-no";
+        number.textContent = String(index + 1).padStart(2, "0");
+
+        button.append(number, document.createTextNode(topic.tab));
+        fragment.appendChild(button);
+      });
+
+      if (state.customTopic) {
+        const button = document.createElement("button");
+        button.className = "topic-btn custom-chip";
+        button.type = "button";
+        button.dataset.custom = "true";
+        button.title = state.customTopic.custom.prompt;
+        button.setAttribute("aria-pressed", "false");
+
+        const mark = document.createElement("span");
+        mark.className = "topic-no";
+        mark.textContent = "✦";
+
+        const label = document.createElement("span");
+        label.className = "chip-label";
+        label.textContent = state.customTopic.tab;
+
+        button.append(mark, label);
+        fragment.appendChild(button);
+      }
+
+      els.topicBar.replaceChildren(fragment);
+    }
+
+    function syncNav() {
+      const curated = state.mode === "curated";
+
+      els.groupBar.querySelectorAll("[data-group]").forEach((button) => {
+        const active = curated && button.dataset.group === state.groupId;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+
+      els.topicBar.querySelectorAll("[data-topic]").forEach((button) => {
+        const active = curated && button.dataset.topic === state.topicId;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+
+      const customChip = els.topicBar.querySelector("[data-custom]");
+      if (customChip) {
+        const active = !curated;
+        customChip.classList.toggle("active", active);
+        customChip.setAttribute("aria-pressed", String(active));
+      }
+    }
+
+    function renderTopThree(ranking) {
+      els.top3.innerHTML = ranking.slice(0, 3).map((entry, index) => `
+        <div class="rank-card" style="--sign-color:${entry.color}">
+          <span class="rank-index">0${index + 1}</span>
+          <span class="rank-glyph">${entry.glyph}</span>
+          <span class="rank-sign">
+            <strong>${entry.name}</strong>
+            <small>${entry.element} · ${entry.ruler}守护</small>
+          </span>
+          <span class="rank-score">${entry.score}</span>
+        </div>
+      `).join("");
+    }
+
+    function clearChartTimers() {
+      state.timers.forEach((timer) => window.clearTimeout(timer));
+      state.timers = [];
+      state.renderToken += 1;
+    }
+
+    function animateNumber(element, target, token) {
+      if (reduceMotionQuery.matches) {
+        element.textContent = String(target);
+        return;
+      }
+
+      const duration = 1040;
+      const startedAt = performance.now();
+
+      function tick(now) {
+        if (token !== state.renderToken) {
+          return;
+        }
+
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = String(Math.round(target * eased));
+
+        if (progress < 1) {
+          window.requestAnimationFrame(tick);
+        } else {
+          element.textContent = String(target);
+        }
+      }
+
+      window.requestAnimationFrame(tick);
+    }
+
+    function renderChart(topic, ranking) {
+      clearChartTimers();
+      const token = state.renderToken;
+      const rankMap = new Map(ranking.map((entry) => [entry.key, entry]));
+      const signSequence = state.sortByRank ? ranking.map((entry) => entry.key) : FIXED_ORDER;
+      const entries = signSequence.map((key) => rankMap.get(key));
+
+      els.barLayer.innerHTML = "";
+      els.xAxis.innerHTML = "";
+
+      entries.forEach((entry, index) => {
+        const column = document.createElement("div");
+        column.className = "bar-col";
+
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.setProperty("--bar-top", entry.color);
+        bar.style.setProperty("--bar-bottom", entry.deep);
+        bar.dataset.score = String(entry.score);
+        bar.dataset.top = String(entry.rank + 1);
+        bar.title = `${entry.name} · ${entry.score}`;
+
+        const value = document.createElement("span");
+        value.className = "bar-value";
+        value.textContent = "0";
+
+        bar.appendChild(value);
+        column.appendChild(bar);
+        els.barLayer.appendChild(column);
+
+        const xCell = document.createElement("div");
+        xCell.className = "x-cell";
+        const xName = document.createElement("span");
+        xName.textContent = entry.name;
+        xName.title = `${entry.name} · ${entry.element}`;
+        xCell.appendChild(xName);
+        els.xAxis.appendChild(xCell);
+
+        const delay = 75 + index * 46;
+        const timerId = window.setTimeout(() => {
+          if (token !== state.renderToken) {
+            return;
+          }
+          bar.style.height = `${(entry.score / MAX_SCORE) * 100}%`;
+          animateNumber(value, entry.score, token);
+        }, reduceMotionQuery.matches ? 0 : delay);
+
+        state.timers.push(timerId);
+      });
+
+      const podium = ranking.slice(0, 3)
+        .map((entry, index) => `第 ${index + 1} 名 ${entry.name} ${entry.score} 分`)
+        .join("；");
+
+      els.chartRegion.setAttribute(
+        "aria-label",
+        `${topic.title}，满分两万。${podium}。柱状图从零开始生长，依次展示十二星座的星象指数。`
+      );
+    }
+
+    function renderView() {
+      state.mode = "curated";
+      const { group, topic } = TOPIC_MAP.get(state.topicId);
+      const globalIndex = TOPIC_ENTRIES.findIndex((entry) => entry.topic.id === topic.id);
+      const ranking = buildRanking(topic);
+      const suffix = "星座";
+      const baseTitle = topic.title.endsWith(suffix) ? topic.title.slice(0, -suffix.length) : topic.title;
+
+      state.groupId = group.id;
+      els.chartNo.textContent = String(globalIndex + 1).padStart(2, "0");
+      els.chartGroup.textContent = group.name;
+      setChartTitle(baseTitle);
+      els.topicDesc.textContent = topic.desc;
+      els.insightText.textContent = topic.insight;
+      els.chartScroll.scrollLeft = 0;
+      renderTopThree(ranking);
+      renderChart(topic, ranking);
+      document.title = `${topic.title}｜十二星座趣味数据榜`;
+      syncNav();
+    }
+
+    function renderCustomView() {
+      if (!state.customTopic) {
+        return;
+      }
+
+      state.mode = "custom";
+      const topic = state.customTopic;
+      const ranking = buildRanking(topic);
+
+      els.chartNo.textContent = "∞";
+      els.chartGroup.textContent = "自由生成";
+      setChartTitle(topic.custom.core);
+      els.topicDesc.textContent = topic.desc;
+      els.insightText.textContent = topic.insight;
+      els.chartScroll.scrollLeft = 0;
+      renderTopThree(ranking);
+      renderChart(topic, ranking);
+      document.title = `${topic.title}｜自由出题｜十二星座趣味数据榜`;
+      renderTopicBar();
+      syncNav();
+
+      const chip = els.topicBar.querySelector("[data-custom='true']");
+      if (chip) {
+        const barRect = els.topicBar.getBoundingClientRect();
+        const chipRect = chip.getBoundingClientRect();
+        if (chipRect.right > barRect.right || chipRect.left < barRect.left) {
+          const target = els.topicBar.scrollLeft + chipRect.left - barRect.left - (barRect.width - chipRect.width) / 2;
+          els.topicBar.scrollTo({
+            left: Math.max(0, target),
+            behavior: reduceMotionQuery.matches ? "auto" : "smooth"
+          });
+        }
+      }
+    }
+
+    function setCustomPanel(open, focusInput = false) {
+      els.customPanel.hidden = !open;
+      els.customToggle.setAttribute("aria-expanded", String(open));
+      els.customToggleLabel.textContent = open ? "收起" : "自由出题";
+
+      if (open && focusInput) {
+        window.requestAnimationFrame(() => {
+          els.customInput.focus({ preventScroll: true });
+        });
+      }
+    }
+
+    function showCustomError(message) {
+      els.customError.textContent = message;
+      els.customError.hidden = !message;
+      els.customInput.setAttribute("aria-invalid", message ? "true" : "false");
+
+      if (message) {
+        els.customInput.focus({ preventScroll: true });
+      }
+    }
+
+    function submitCustomPrompt(raw) {
+      const prompt = normalizePrompt(raw);
+      const error = customPromptError(prompt);
+
+      if (error) {
+        showCustomError(error);
+        return;
+      }
+
+      state.customTopic = buildCustomTopic(prompt);
+      els.customInput.value = prompt;
+      showCustomError("");
+      setCustomPanel(false);
+      renderCustomView();
+      els.chartCard.scrollIntoView({
+        behavior: reduceMotionQuery.matches ? "auto" : "smooth",
+        block: "start"
+      });
+    }
+
+    function selectTopic(topicId) {
+      const target = TOPIC_MAP.get(topicId);
+      if (!target) {
+        return;
+      }
+
+      setCustomPanel(false);
+      const groupChanged = target.group.id !== state.groupId;
+      state.topicId = topicId;
+
+      if (groupChanged) {
+        state.groupId = target.group.id;
+        renderGroupBar();
+        renderTopicBar();
+      }
+
+      renderView();
+    }
+
+    els.groupBar.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-group]");
+      if (!button) {
+        return;
+      }
+
+      const group = GROUP_MAP.get(button.dataset.group);
+      if (!group) {
+        return;
+      }
+      if (state.mode === "curated" && group.id === state.groupId) {
+        return;
+      }
+
+      setCustomPanel(false);
+      state.groupId = group.id;
+      state.topicId = group.topics[0].id;
+      renderGroupBar();
+      renderTopicBar();
+      renderView();
+    });
+
+    els.topicBar.addEventListener("click", (event) => {
+      if (event.target.closest("[data-custom]")) {
+        renderCustomView();
+        return;
+      }
+
+      const button = event.target.closest("[data-topic]");
+      if (!button) {
+        return;
+      }
+      if (state.mode === "curated" && button.dataset.topic === state.topicId) {
+        return;
+      }
+      selectTopic(button.dataset.topic);
+    });
+
+    els.customToggle.addEventListener("click", () => {
+      const open = els.customToggle.getAttribute("aria-expanded") !== "true";
+      setCustomPanel(open, open);
+    });
+
+    els.customForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitCustomPrompt(els.customInput.value);
+    });
+
+    els.customPanel.addEventListener("click", (event) => {
+      const chip = event.target.closest("[data-example]");
+      if (!chip) {
+        return;
+      }
+
+      els.customInput.value = chip.dataset.example;
+      submitCustomPrompt(chip.dataset.example);
+    });
+
+    els.customInput.addEventListener("input", () => {
+      if (!els.customError.hidden) {
+        showCustomError("");
+      }
+    });
+
+    els.customPanel.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setCustomPanel(false);
+        els.customToggle.focus({ preventScroll: true });
+      }
+    });
+
+    els.sortBtn.addEventListener("click", () => {
+      state.sortByRank = !state.sortByRank;
+      els.sortBtn.setAttribute("aria-pressed", String(state.sortByRank));
+      els.sortBtn.title = state.sortByRank ? "切换回十二星座固定顺序" : "切换为按指数从高到低排列";
+      els.sortLabel.textContent = state.sortByRank ? "回到星座序" : "按排名排列";
+      els.chartScroll.scrollLeft = 0;
+
+      const topic = activeTopic();
+      renderChart(topic, buildRanking(topic));
+    });
+
+    els.replayBtn.addEventListener("click", () => {
+      const topic = activeTopic();
+      renderChart(topic, buildRanking(topic));
+    });
+
+    renderGroupBar();
+    renderTopicBar();
+    renderView();
+  </script>
+</body>
+</html>
