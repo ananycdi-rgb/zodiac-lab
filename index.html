@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="十二星座趣味性格数据榜：36 个精选维度，也能自由出题生成图表，柱状图从 0 开始生长。内容仅供娱乐。">
+  <meta name="description" content="十二星座趣味性格数据榜：36 个精选维度、自由出题与双人配对指南，柱状图从 0 开始生长。内容仅供娱乐。">
   <title>十二星座趣味数据榜</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b3b34'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23f7f3e8'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
   <style>
@@ -1330,12 +1330,862 @@
       }
     }
 
+    .topbar-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .pair-jump {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(36, 115, 90, 0.28);
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 180ms ease, border-color 180ms ease;
+    }
+
+    .pair-jump span {
+      font-family: var(--num-font);
+      font-size: 10px;
+      transition: transform 180ms ease;
+    }
+
+    .pair-jump:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pair-jump:hover span {
+      transform: translateY(2px);
+    }
+
+    .pair-card {
+      position: relative;
+      overflow: hidden;
+      margin-top: 20px;
+      padding: 31px 34px 21px;
+      border: 1px solid rgba(95, 83, 64, 0.12);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 96% 0%, rgba(181, 138, 76, 0.1), transparent 28%),
+        var(--surface);
+      box-shadow: 0 28px 70px rgba(60, 53, 38, 0.065);
+      scroll-margin-top: 22px;
+    }
+
+    .pair-card::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), #c9a46a 34%, var(--accent) 72%, transparent 94%);
+      content: "";
+      opacity: 0.72;
+    }
+
+    .pair-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .pair-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+    }
+
+    .pair-kicker-badge {
+      color: #76532a;
+      background: #f6eddc;
+    }
+
+    .pair-title {
+      margin: 13px 0 9px;
+      color: var(--ink);
+      font-size: clamp(31px, 4vw, 44px);
+      font-weight: 760;
+      line-height: 1.24;
+      letter-spacing: -0.045em;
+      text-wrap: balance;
+    }
+
+    .pair-title em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .pair-desc {
+      max-width: 680px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.75;
+    }
+
+    .pair-model {
+      flex: 0 0 238px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-soft);
+    }
+
+    .pair-model span {
+      color: var(--muted);
+      font-family: var(--num-font);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+
+    .pair-model strong {
+      display: block;
+      margin: 5px 0 5px;
+      color: var(--accent-deep);
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .pair-model p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.7;
+    }
+
+    .pair-selector {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 52px minmax(0, 1fr);
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+
+    .pair-person {
+      position: relative;
+      overflow: hidden;
+      padding: 15px 17px 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface-soft);
+      transition: border-color 180ms ease, background 180ms ease;
+    }
+
+    .pair-person::before {
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      left: 0;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: var(--pair-sign-color, var(--accent));
+      content: "";
+      transition: background 240ms ease;
+    }
+
+    .pair-person:focus-within {
+      border-color: rgba(36, 115, 90, 0.34);
+      background: var(--surface);
+    }
+
+    .pair-person-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .pair-role {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .pair-gender {
+      display: flex;
+      padding: 2px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(242, 238, 230, 0.72);
+    }
+
+    .pair-gender button {
+      padding: 3px 8px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .pair-gender button:hover {
+      color: var(--ink);
+    }
+
+    .pair-gender button[aria-pressed="true"] {
+      color: var(--accent-deep);
+      background: var(--surface);
+      box-shadow: 0 2px 6px rgba(47, 43, 31, 0.07);
+      font-weight: 700;
+    }
+
+    .pair-person-main {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 11px;
+    }
+
+    .pair-glyph {
+      display: grid;
+      flex: 0 0 auto;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--pair-sign-color) 28%, transparent);
+      border-radius: 50%;
+      color: var(--pair-sign-color);
+      background: color-mix(in srgb, var(--pair-sign-color) 9%, white);
+      font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
+      font-size: 25px;
+      line-height: 1;
+      transition: color 240ms ease, border-color 240ms ease, background 240ms ease;
+    }
+
+    .pair-select-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      padding-right: 22px;
+    }
+
+    .pair-select {
+      width: 100%;
+      padding: 0;
+      border: 0;
+      appearance: none;
+      color: var(--ink);
+      background: transparent;
+      font-size: 22px;
+      font-weight: 760;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      cursor: pointer;
+    }
+
+    .pair-select:focus {
+      outline: none;
+    }
+
+    .pair-select-wrap:focus-within .pair-select {
+      color: var(--accent-deep);
+    }
+
+    .pair-caret {
+      position: absolute;
+      top: 50%;
+      right: 2px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1;
+      pointer-events: none;
+      transform: translateY(-58%);
+    }
+
+    .pair-meta {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+    }
+
+    .pair-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--muted);
+    }
+
+    .pair-x {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      color: var(--accent-deep);
+      background: var(--surface);
+      font-family: var(--num-font);
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .pair-connector small {
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .pair-result {
+      display: grid;
+      grid-template-columns: minmax(270px, 310px) minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .pair-score-panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 286px;
+      padding: 22px 22px 18px;
+      overflow: hidden;
+      border-radius: 20px;
+      color: #f7f3e8;
+      background:
+        radial-gradient(circle at 93% -8%, rgba(181, 138, 76, 0.34), transparent 42%),
+        linear-gradient(150deg, #23463d, #162c27 64%, #11221e);
+      box-shadow: 0 18px 38px rgba(24, 45, 38, 0.18);
+    }
+
+    .pair-score-panel::after {
+      position: absolute;
+      right: -62px;
+      bottom: -82px;
+      width: 190px;
+      height: 190px;
+      border: 1px solid rgba(247, 243, 232, 0.11);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .pair-watermark {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      color: rgba(247, 243, 232, 0.055);
+      font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
+      font-size: 64px;
+      line-height: 1;
+      letter-spacing: -8px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .pair-score-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pair-score-en {
+      color: #d8bc86;
+      font-family: var(--num-font);
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+
+    .pair-score-pair {
+      margin: 5px 0 0;
+      color: rgba(247, 243, 232, 0.72);
+      font-size: 11.5px;
+      line-height: 1.4;
+    }
+
+    .pair-score-gender {
+      flex: 0 0 auto;
+      padding: 4px 7px;
+      border: 1px solid rgba(247, 243, 232, 0.17);
+      border-radius: 999px;
+      color: rgba(247, 243, 232, 0.7);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .pair-score-main {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      margin-top: 18px;
+    }
+
+    .pair-score-number {
+      color: #fffdf9;
+      font-family: var(--num-font);
+      font-size: 76px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 0.82;
+      letter-spacing: -0.06em;
+    }
+
+    .pair-score-max {
+      padding-bottom: 5px;
+      color: rgba(247, 243, 232, 0.46);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .pair-verdict {
+      position: relative;
+      z-index: 1;
+      margin: 12px 0 0;
+      color: #f0d39f;
+      font-size: 19px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .pair-summary {
+      position: relative;
+      z-index: 1;
+      margin: 7px 0 0;
+      color: rgba(247, 243, 232, 0.68);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .pair-badges {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: auto;
+      padding-top: 16px;
+    }
+
+    .pair-badge {
+      padding: 3px 7px;
+      border: 1px solid rgba(247, 243, 232, 0.14);
+      border-radius: 999px;
+      color: rgba(247, 243, 232, 0.66);
+      background: rgba(247, 243, 232, 0.05);
+      font-size: 9px;
+      line-height: 1.4;
+    }
+
+    .pair-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .pair-dims {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px 24px;
+      padding: 2px 2px 0;
+    }
+
+    .pair-dim {
+      min-width: 0;
+    }
+
+    .pair-dim:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .pair-dim-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pair-dim-label {
+      color: var(--ink-soft);
+      font-size: 11.5px;
+      font-weight: 650;
+    }
+
+    .pair-dim-value {
+      color: var(--ink);
+      font-family: var(--num-font);
+      font-size: 12.5px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .pair-dim-track {
+      height: 5px;
+      margin-top: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--line);
+    }
+
+    .pair-dim-fill {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--pair-a-color, var(--accent)), var(--pair-b-color, var(--gold)));
+      transition: width 950ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pair-readings {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .pair-reading {
+      min-height: 118px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-soft);
+    }
+
+    .pair-reading-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-deep);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .pair-reading-label::before {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      content: "";
+    }
+
+    .pair-reading[data-tone="warn"] .pair-reading-label {
+      color: #86602d;
+    }
+
+    .pair-reading[data-tone="warn"] .pair-reading-label::before {
+      background: var(--gold);
+    }
+
+    .pair-reading[data-tone="tip"] {
+      border-color: rgba(36, 115, 90, 0.18);
+      background: var(--accent-soft);
+    }
+
+    .pair-reading p {
+      margin: 7px 0 0;
+      color: var(--ink-soft);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .pair-best {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      margin-top: 18px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+
+    .pair-best-copy {
+      display: flex;
+      flex: 0 0 auto;
+      flex-direction: column;
+      gap: 5px;
+      max-width: 200px;
+    }
+
+    .pair-best-label {
+      color: var(--ink);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .pair-best-hint {
+      color: var(--muted);
+      font-size: 9.5px;
+    }
+
+    .pair-best-list {
+      display: grid;
+      flex: 1;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      max-width: 650px;
+    }
+
+    .pair-best-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: inherit;
+      background: var(--surface);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .pair-best-card:hover {
+      border-color: var(--line-strong);
+      background: var(--surface-soft);
+      transform: translateY(-1px);
+    }
+
+    .pair-best-card.active {
+      border-color: rgba(36, 115, 90, 0.34);
+      background: var(--accent-soft);
+    }
+
+    .pair-best-glyph {
+      display: grid;
+      flex: 0 0 auto;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--sign-color) 26%, transparent);
+      border-radius: 50%;
+      color: var(--sign-color);
+      background: color-mix(in srgb, var(--sign-color) 9%, white);
+      font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .pair-best-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .pair-best-info strong {
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pair-best-info small {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 8.5px;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pair-best-score {
+      margin-left: auto;
+      color: var(--accent-deep);
+      font-family: var(--num-font);
+      font-size: 13.5px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .pair-disclaimer {
+      margin: 15px 0 0;
+      color: #aeaba1;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .pair-head {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .pair-model {
+        flex-basis: auto;
+        max-width: none;
+      }
+
+      .pair-result {
+        grid-template-columns: 1fr;
+      }
+
+      .pair-score-panel {
+        min-height: 0;
+      }
+
+      .pair-score-number {
+        font-size: 64px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-links {
+        gap: 0;
+      }
+
+      .topbar-note {
+        display: none;
+      }
+
+      .pair-card {
+        margin-top: 16px;
+        padding: 22px 15px 17px;
+        border-radius: 21px;
+      }
+
+      .pair-title {
+        font-size: clamp(29px, 8vw, 38px);
+      }
+
+      .pair-desc {
+        font-size: 12.5px;
+        line-height: 1.7;
+      }
+
+      .pair-model {
+        padding: 10px 12px;
+      }
+
+      .pair-selector {
+        grid-template-columns: 1fr;
+        gap: 9px;
+        margin-top: 16px;
+      }
+
+      .pair-connector {
+        flex-direction: row;
+        gap: 8px;
+      }
+
+      .pair-x {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+
+      .pair-result {
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .pair-score-panel {
+        padding: 18px 18px 16px;
+        border-radius: 17px;
+      }
+
+      .pair-score-number {
+        font-size: 64px;
+      }
+
+      .pair-watermark {
+        font-size: 52px;
+      }
+
+      .pair-summary {
+        font-size: 11px;
+      }
+
+      .pair-dims {
+        gap: 12px 16px;
+      }
+
+      .pair-readings {
+        grid-template-columns: 1fr;
+      }
+
+      .pair-reading {
+        min-height: 0;
+      }
+
+      .pair-best {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .pair-best-copy {
+        max-width: none;
+      }
+
+      .pair-best-list {
+        grid-template-columns: 1fr;
+        max-width: none;
+      }
+
+      .pair-best-card {
+        min-height: 44px;
+      }
+
+      .pair-disclaimer {
+        line-height: 1.7;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .pair-person {
+        padding: 14px;
+      }
+
+      .pair-select {
+        font-size: 20px;
+      }
+
+      .pair-score-number {
+        font-size: 58px;
+      }
+
+      .pair-gender button {
+        padding: 3px 7px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html {
         scroll-behavior: auto;
       }
 
       .bar {
+        transition: none;
+      }
+
+      .pair-dim-fill,
+      .pair-best-card,
+      .pair-person,
+      .pair-glyph,
+      .pair-person::before {
         transition: none;
       }
 
@@ -1354,7 +2204,10 @@
           <span>ZODIAC INDEX</span>
           <span class="cn">星象趣味研究所</span>
         </div>
-        <div class="topbar-note">12 SIGNS · 36 TOPICS · ∞ CUSTOM</div>
+        <div class="topbar-links">
+          <span class="topbar-note">12 SIGNS · 36 TOPICS · PAIRING · ∞ CUSTOM</span>
+          <a class="pair-jump" href="#pairing">配对指南 <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
 
       <div class="hero">
@@ -1363,7 +2216,7 @@
           <h1>十二星座<span class="period">。</span></h1>
         </div>
         <div class="hero-aside">
-          <p>把十二种性格<br>写成一张会生长的图。<span class="hero-aside-extra">36 个精选维度之外，也可以写你自己的题。</span></p>
+          <p>把十二种性格<br>写成一张会生长的图。<span class="hero-aside-extra">36 个精选维度之外，还可以自由出题、查看双人配对。</span></p>
           <div class="hero-meta">
             <span class="live-dot"></span>
             <span>性格原型取自占星传统 · 数值为趣味演绎</span>
@@ -1495,12 +2348,128 @@
 
         <p class="disclaimer">内容仅供娱乐｜数值均为虚拟量化｜请勿轻信</p>
       </section>
+
+      <section class="pair-card" id="pairing" aria-labelledby="pairTitle">
+        <div class="pair-head">
+          <div>
+            <div class="pair-kicker">
+              <span class="no-badge pair-kicker-badge">PAIR</span>
+              <span>星座配对指南</span>
+              <span class="kicker-sep"></span>
+              <span>契合指数 / 100</span>
+            </div>
+            <h2 class="pair-title" id="pairTitle">两个人，<em>十二种</em>性格的相遇。</h2>
+            <p class="pair-desc">从 36 个观察维度出发，叠加四元素与星座相位，看看两位主角的火花、默契与需要磨合的地方。</p>
+          </div>
+          <div class="pair-model">
+            <span>HOW IT WORKS</span>
+            <strong>36 维度 × 四元素 × 相位</strong>
+            <p>选择星座即时重算契合度；选择称呼会切换文案视角，不改变星象契合分。</p>
+          </div>
+        </div>
+
+        <div class="pair-selector">
+          <div class="pair-person" id="pairPersonA" style="--pair-sign-color:#6772D4">
+            <div class="pair-person-top">
+              <span class="pair-role">主角 A</span>
+              <div class="pair-gender" id="pairGenderA" role="group" aria-label="主角 A 的称呼">
+                <button type="button" data-gender="female" aria-pressed="true">女</button>
+                <button type="button" data-gender="male" aria-pressed="false">男</button>
+                <button type="button" data-gender="any" aria-pressed="false">不限</button>
+              </div>
+            </div>
+            <div class="pair-person-main">
+              <span class="pair-glyph" id="pairGlyphA" aria-hidden="true">♋</span>
+              <div class="pair-select-wrap">
+                <label class="sr-only" for="pairSignA">主角 A 的星座</label>
+                <select class="pair-select" id="pairSignA"></select>
+                <span class="pair-caret" aria-hidden="true">⌄</span>
+                <p class="pair-meta" id="pairMetaA"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pair-connector" aria-hidden="true">
+            <span class="pair-x">×</span>
+            <small>契合分析</small>
+          </div>
+
+          <div class="pair-person" id="pairPersonB" style="--pair-sign-color:#9A71CB">
+            <div class="pair-person-top">
+              <span class="pair-role">主角 B</span>
+              <div class="pair-gender" id="pairGenderB" role="group" aria-label="主角 B 的称呼">
+                <button type="button" data-gender="female" aria-pressed="false">女</button>
+                <button type="button" data-gender="male" aria-pressed="true">男</button>
+                <button type="button" data-gender="any" aria-pressed="false">不限</button>
+              </div>
+            </div>
+            <div class="pair-person-main">
+              <span class="pair-glyph" id="pairGlyphB" aria-hidden="true">♏</span>
+              <div class="pair-select-wrap">
+                <label class="sr-only" for="pairSignB">主角 B 的星座</label>
+                <select class="pair-select" id="pairSignB"></select>
+                <span class="pair-caret" aria-hidden="true">⌄</span>
+                <p class="pair-meta" id="pairMetaB"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pair-result">
+          <div class="pair-score-panel" id="pairScorePanel">
+            <span class="pair-watermark" id="pairWatermark" aria-hidden="true">♋ ♏</span>
+            <div class="pair-score-top">
+              <div>
+                <span class="pair-score-en">COMPATIBILITY</span>
+                <p class="pair-score-pair" id="pairScorePair">巨蟹座 × 天蝎座</p>
+              </div>
+              <span class="pair-score-gender" id="pairScoreGender">她 × 他</span>
+            </div>
+            <div class="pair-score-main">
+              <strong class="pair-score-number" id="pairScore">0</strong>
+              <span class="pair-score-max">/ 100</span>
+            </div>
+            <p class="pair-verdict" id="pairVerdict">灵魂同频</p>
+            <p class="pair-summary" id="pairSummary"></p>
+            <div class="pair-badges" id="pairBadges"></div>
+          </div>
+
+          <div class="pair-details">
+            <div class="pair-dims" id="pairDims" aria-label="配对维度得分"></div>
+            <div class="pair-readings">
+              <div class="pair-reading">
+                <span class="pair-reading-label">相处优势</span>
+                <p id="pairStrength"></p>
+              </div>
+              <div class="pair-reading" data-tone="warn">
+                <span class="pair-reading-label">潜在摩擦</span>
+                <p id="pairFriction"></p>
+              </div>
+              <div class="pair-reading" data-tone="tip">
+                <span class="pair-reading-label">相处建议</span>
+                <p id="pairAdvice"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pair-best">
+          <div class="pair-best-copy">
+            <span class="pair-best-label" id="pairBestLabel">为巨蟹座挑的高分搭档</span>
+            <span class="pair-best-hint">点击可直接替换主角 B</span>
+          </div>
+          <div class="pair-best-list" id="pairBest"></div>
+        </div>
+
+        <p class="pair-disclaimer">配对结果由性格原型与星象关系综合演绎，仅供娱乐｜性别选择只影响称呼与阅读视角</p>
+        <p class="sr-only" id="pairLive" aria-live="polite"></p>
+      </section>
     </main>
 
     <footer class="page-footer">
       <span class="footer-mark">✦</span>
-      <p>性格原型参考西方占星学中四元素、三形态、守护星与宫位的常见象征体系；精选指数与自由出题结果都由性格倾向映射而成，不代表统计数据、科学结论或任何现实建议。</p>
-      <span class="footer-meta">36 CURATED / ∞ CUSTOM</span>
+      <p>性格原型参考西方占星学中四元素、三形态、守护星与宫位的常见象征体系；精选指数、自由出题与配对结果都由性格倾向映射而成，不代表统计数据、科学结论或任何现实建议。</p>
+      <span class="footer-meta">36 CURATED / ∞ CUSTOM / PAIRING</span>
     </footer>
   </div>
 
@@ -2148,6 +3117,111 @@
       pisces: "感受力与想象力像潮水一样充沛"
     };
 
+    const PAIR_SIGN_META = {
+      aries: { modality: "基本宫", polarity: "阳性" },
+      taurus: { modality: "固定宫", polarity: "阴性" },
+      gemini: { modality: "变动宫", polarity: "阳性" },
+      cancer: { modality: "基本宫", polarity: "阴性" },
+      leo: { modality: "固定宫", polarity: "阳性" },
+      virgo: { modality: "变动宫", polarity: "阴性" },
+      libra: { modality: "基本宫", polarity: "阳性" },
+      scorpio: { modality: "固定宫", polarity: "阴性" },
+      sagittarius: { modality: "变动宫", polarity: "阳性" },
+      capricorn: { modality: "基本宫", polarity: "阴性" },
+      aquarius: { modality: "固定宫", polarity: "阳性" },
+      pisces: { modality: "变动宫", polarity: "阴性" }
+    };
+
+    const PAIR_GENDERS = {
+      female: { label: "女", pronoun: "她" },
+      male: { label: "男", pronoun: "他" },
+      any: { label: "不限", pronoun: "TA" }
+    };
+
+    const PAIR_SIGN_NOTES = {
+      aries: "用直接和行动力表达在意",
+      taurus: "把稳定、陪伴与生活质感放在前面",
+      gemini: "靠聊天、变化和新鲜感维持连接",
+      cancer: "把归属感与情绪照顾放在关系中心",
+      leo: "需要被看见，也愿意把偏爱给得很明显",
+      virgo: "用细节、秩序和实际照顾表达喜欢",
+      libra: "重视分寸、氛围和双向的体面",
+      scorpio: "要求真诚与深度，边界感很强",
+      sagittarius: "需要空间，也愿意把世界分享给伴侣",
+      capricorn: "用长期规划和责任感兑现承诺",
+      aquarius: "保留独立频率，也尊重彼此的不同",
+      pisces: "共情力强，容易把关系写成浪漫故事"
+    };
+
+    const PAIR_DIMENSIONS = [
+      { key: "spark", label: "心动吸引", weight: 0.22 },
+      { key: "emotional", label: "情绪共振", weight: 0.25 },
+      { key: "communication", label: "沟通默契", weight: 0.2 },
+      { key: "daily", label: "生活同频", weight: 0.16 },
+      { key: "stability", label: "长期稳定", weight: 0.17 }
+    ];
+
+    const PAIR_ELEMENT_CHEMISTRY = {
+      "火象|火象": 82, "土象|土象": 82, "风象|风象": 78, "水象|水象": 84,
+      "火象|风象": 92, "风象|火象": 92,
+      "土象|水象": 92, "水象|土象": 92,
+      "火象|土象": 56, "土象|火象": 56,
+      "火象|水象": 52, "水象|火象": 52,
+      "风象|土象": 58, "土象|风象": 58,
+      "风象|水象": 60, "水象|风象": 60
+    };
+
+    const PAIR_ASPECTS = {
+      0: { name: "同座", spark: 2, ease: -1, bond: -1 },
+      1: { name: "相邻", spark: 1, ease: 2, bond: 1 },
+      2: { name: "六分相", spark: 3, ease: 4, bond: 2 },
+      3: { name: "四分相", spark: 2, ease: -4, bond: -3 },
+      4: { name: "三分相", spark: 4, ease: 5, bond: 4 },
+      5: { name: "梅花相", spark: 1, ease: -2, bond: -2 },
+      6: { name: "对分相", spark: 5, ease: -4, bond: -2 },
+      7: { name: "梅花相", spark: 1, ease: -2, bond: -2 },
+      8: { name: "三分相", spark: 4, ease: 5, bond: 4 },
+      9: { name: "四分相", spark: 2, ease: -4, bond: -3 },
+      10: { name: "六分相", spark: 3, ease: 4, bond: 2 },
+      11: { name: "相邻", spark: 1, ease: 2, bond: 1 }
+    };
+
+    const PAIR_DIMENSION_COPY = {
+      spark: {
+        strength: "两个人都愿意为关系制造心跳，浪漫、审美与仪式感很容易互相点燃。",
+        friction: "心动的表达频率不太一致：有人需要热烈回应，有人把喜欢藏进日常。",
+        advice: "把欣赏及时说出口，也把约会和惊喜做成双方都舒服的频率。"
+      },
+      emotional: {
+        strength: "情绪温度接近，低落时更容易先被接住，而不是被急着讲道理。",
+        friction: "两个人都需要安全感，却可能用沉默、试探或吃醋来确认在意。",
+        advice: "先回应感受，再讨论事情；不安时直接说出需要，少让对方猜。"
+      },
+      communication: {
+        strength: "聊天与表达容易对上频道，分歧也更有机会被摊开说清楚。",
+        friction: "表达和回应的节奏不同，容易把「没及时说」误读成「不在意」。",
+        advice: "约定重要话题的沟通方式与回复预期，别用冷战代替表达。"
+      },
+      daily: {
+        strength: "日常节奏与生活审美接近，吃饭、收纳和仪式感都容易过到一块儿。",
+        friction: "一个想宅家，一个想出门；或对金钱与秩序的习惯不同，小事容易积累。",
+        advice: "把家务、消费和独处时间提前说清楚，用可执行的约定代替默契假设。"
+      },
+      stability: {
+        strength: "对承诺与长期规划的态度接近，遇到现实问题更愿意一起扛。",
+        friction: "两个人都坚持自己的方式，冲突时容易比谁更能撑，长期问题被拖延。",
+        advice: "把边界、金钱与未来计划放到桌面上；稳定来自可预期的行动。"
+      }
+    };
+
+    const PAIR_VERDICTS = [
+      { min: 86, label: "灵魂同频", summary: "核心节奏高度贴合，连沉默都不太需要解释。" },
+      { min: 80, label: "高甜默契", summary: "舒服与心动同时在线，偶尔的小分歧更像调味。" },
+      { min: 73, label: "稳中有火花", summary: "底子不错，但生活细节与沟通方式还需要对齐。" },
+      { min: 64, label: "需要磨合", summary: "吸引力不缺，真正要练的是沟通、边界与耐心。" },
+      { min: 0, label: "高难度心动", summary: "差异感很强，容易被彼此吸引，也容易互相消耗。" }
+    ];
+
     const NEGATIVE_RE = /(最不|没|没有|^不$|不擅长|不会|不爱|不喜欢|不能|不敢|做不到|不太|不常|不想|不愿|不适合|不容易|不易|讨厌|害怕|恐惧|缺乏|不善|困难|抗拒|拒绝)/;
     const CURATED_TRAITS = TOPIC_ENTRIES.map(({ topic }) => ({
       id: `topic:${topic.id}`,
@@ -2163,7 +3237,13 @@
       customTopic: null,
       sortByRank: false,
       renderToken: 0,
-      timers: []
+      timers: [],
+      pairA: "cancer",
+      pairB: "scorpio",
+      pairGenderA: "female",
+      pairGenderB: "male",
+      pairToken: 0,
+      pairPending: false
     };
 
     const els = {
@@ -2188,7 +3268,32 @@
       customPanel: document.getElementById("customPanel"),
       customForm: document.getElementById("customForm"),
       customInput: document.getElementById("customInput"),
-      customError: document.getElementById("customError")
+      customError: document.getElementById("customError"),
+      pairCard: document.getElementById("pairing"),
+      pairPersonA: document.getElementById("pairPersonA"),
+      pairPersonB: document.getElementById("pairPersonB"),
+      pairGenderA: document.getElementById("pairGenderA"),
+      pairGenderB: document.getElementById("pairGenderB"),
+      pairSignA: document.getElementById("pairSignA"),
+      pairSignB: document.getElementById("pairSignB"),
+      pairGlyphA: document.getElementById("pairGlyphA"),
+      pairGlyphB: document.getElementById("pairGlyphB"),
+      pairMetaA: document.getElementById("pairMetaA"),
+      pairMetaB: document.getElementById("pairMetaB"),
+      pairScore: document.getElementById("pairScore"),
+      pairVerdict: document.getElementById("pairVerdict"),
+      pairSummary: document.getElementById("pairSummary"),
+      pairBadges: document.getElementById("pairBadges"),
+      pairScoreGender: document.getElementById("pairScoreGender"),
+      pairScorePair: document.getElementById("pairScorePair"),
+      pairWatermark: document.getElementById("pairWatermark"),
+      pairDims: document.getElementById("pairDims"),
+      pairStrength: document.getElementById("pairStrength"),
+      pairFriction: document.getElementById("pairFriction"),
+      pairAdvice: document.getElementById("pairAdvice"),
+      pairBestLabel: document.getElementById("pairBestLabel"),
+      pairBest: document.getElementById("pairBest"),
+      pairLive: document.getElementById("pairLive")
     };
 
     function hash01(input) {
@@ -2224,6 +3329,401 @@
         const sign = SIGN_MAP.get(key);
         return { ...sign, rank, score: scoreFor(topic, key, rank) };
       });
+    }
+
+    function pairClamp(value, min = 0, max = 97) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function pairAverage(...values) {
+      return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }
+
+    function pairSimilarity(a, b) {
+      return 1 - Math.abs(a - b);
+    }
+
+    function pairAffinity(signKey, topicId) {
+      const entry = TOPIC_MAP.get(topicId);
+      const rank = entry ? entry.topic.order.indexOf(signKey) : -1;
+      return rank < 0 ? 0.5 : 1 - rank / 11;
+    }
+
+    function pairAspect(aKey, bKey) {
+      const aIndex = SIGNS.findIndex((sign) => sign.key === aKey);
+      const bIndex = SIGNS.findIndex((sign) => sign.key === bKey);
+      const distance = (bIndex - aIndex + 12) % 12;
+      return { distance, ...PAIR_ASPECTS[distance] };
+    }
+
+    function pairVerdict(score) {
+      return PAIR_VERDICTS.find((verdict) => score >= verdict.min) || PAIR_VERDICTS[PAIR_VERDICTS.length - 1];
+    }
+
+    function pairAspectAdvice(aspect) {
+      if (aspect.distance === 0) {
+        return "同座组合容易默认「你懂我」，重要需求仍要说出口。";
+      }
+      if (aspect.ease >= 3) {
+        return "你们的相位天然友好，别因为顺利就省略确认与表达。";
+      }
+      if (aspect.ease <= -3) {
+        return "这段关系自带拉扯感，冲突时先安顿情绪，再讨论对错。";
+      }
+      return "把握差异带来的新鲜感，也别忘了定期对齐彼此的生活节奏。";
+    }
+
+    function computePair(aKey, bKey) {
+      const a = SIGN_MAP.get(aKey) || SIGN_MAP.get("cancer");
+      const b = SIGN_MAP.get(bKey) || SIGN_MAP.get("scorpio");
+      const A = (topicId) => pairAffinity(a.key, topicId);
+      const B = (topicId) => pairAffinity(b.key, topicId);
+      const elementBase = PAIR_ELEMENT_CHEMISTRY[`${a.element}|${b.element}`] || 70;
+      const aspect = pairAspect(a.key, b.key);
+
+      const romanceAvg = pairAverage(
+        A("first-sight"), B("first-sight"),
+        A("coquettish"), B("coquettish"),
+        A("ritual"), B("ritual"),
+        A("surprise"), B("surprise"),
+        A("love-brain"), B("love-brain")
+      );
+      const tasteSim = pairSimilarity(A("photo"), B("photo"));
+      const spark = pairClamp(
+        36 + 34 * romanceAvg + 12 * tasteSim
+        + 8 * pairAverage(A("love-brain"), B("love-brain"))
+        + 0.55 * (elementBase - 70) + aspect.spark * 1.35
+      );
+
+      const warmth = pairAverage(A("comfort"), B("comfort"), A("care"), B("care"));
+      const needSim = pairSimilarity(A("jealousy"), B("jealousy"));
+      const jealousyLoad = Math.max(0, Math.min(A("jealousy"), B("jealousy")) - 0.45);
+      const commitment = pairAverage(A("marriage"), B("marriage"));
+      const emotionalStyle = pairSimilarity(A("love-brain"), B("love-brain"));
+      const emotional = pairClamp(
+        36 + 24 * warmth + 16 * needSim + 12 * commitment + 8 * emotionalStyle
+        - 14 * jealousyLoad + 0.3 * (elementBase - 70) + aspect.bond * 1.5
+      );
+
+      const expressiveness = pairAverage(A("social"), B("social"), A("awkward"), B("awkward"), A("comfort"), B("comfort"));
+      const honestySim = pairSimilarity(A("honesty"), B("honesty"));
+      const replySim = pairSimilarity(A("slow-reply"), B("slow-reply"));
+      const replyQuality = 1 - pairAverage(A("slow-reply"), B("slow-reply"));
+      const freedomSim = pairSimilarity(A("freedom"), B("freedom"));
+      const communication = pairClamp(
+        34 + 19 * expressiveness + 15 * honestySim + 11 * replySim
+        + 9 * replyQuality + 7 * freedomSim + 0.3 * (elementBase - 70) + aspect.ease * 1.2
+      );
+
+      const homeSim = pairSimilarity(A("homebody"), B("homebody"));
+      const ritualSim = pairSimilarity(A("ritual"), B("ritual"));
+      const orderSim = pairSimilarity(A("organize"), B("organize"));
+      const foodAvg = pairAverage(A("cooking"), B("cooking"));
+      const fiscalA = (A("saving") - A("impulse-buy") + 1) / 2;
+      const fiscalB = (B("saving") - B("impulse-buy") + 1) / 2;
+      const fiscalSim = 1 - Math.abs(fiscalA - fiscalB);
+      const lifeAvg = pairAverage(A("enjoy-life"), B("enjoy-life"));
+      const daily = pairClamp(
+        34 + 20 * homeSim + 13 * ritualSim + 11 * orderSim + 9 * foodAvg
+        + 8 * fiscalSim + 7 * lifeAvg + 0.2 * (elementBase - 70) + aspect.bond * 0.9
+      );
+
+      const calmness = 1 - pairAverage(A("cold-war"), B("cold-war"));
+      const stubbornLoad = Math.max(0, Math.min(A("stubborn"), B("stubborn")) - 0.4);
+      const financial = pairAverage(A("finance"), B("finance"), A("saving"), B("saving"));
+      const ambitionSim = pairSimilarity(A("ambition"), B("ambition"));
+      const stability = pairClamp(
+        36 + 22 * commitment + 15 * calmness + 14 * financial + 9 * ambitionSim
+        - 12 * stubbornLoad + 0.25 * (elementBase - 70) + aspect.bond * 1.3
+      );
+
+      const values = { spark, emotional, communication, daily, stability };
+      const dims = PAIR_DIMENSIONS.map((dim) => ({
+        ...dim,
+        value: Math.round(values[dim.key])
+      }));
+      const score = Math.round(PAIR_DIMENSIONS.reduce((total, dim) => total + values[dim.key] * dim.weight, 0));
+      const rankedDims = [...dims].sort((left, right) => right.value - left.value);
+
+      return {
+        a,
+        b,
+        score,
+        dims,
+        aspect,
+        elementBase,
+        verdict: pairVerdict(score),
+        topDim: rankedDims[0],
+        lowDim: rankedDims[rankedDims.length - 1]
+      };
+    }
+
+    function pairBestMatches(signKey) {
+      return SIGNS
+        .filter((sign) => sign.key !== signKey)
+        .map((sign) => ({ sign, result: computePair(signKey, sign.key) }))
+        .sort((left, right) => right.result.score - left.result.score)
+        .slice(0, 3);
+    }
+
+    function populatePairSelects() {
+      [els.pairSignA, els.pairSignB].forEach((select) => {
+        const fragment = document.createDocumentFragment();
+        SIGNS.forEach((sign) => {
+          const option = document.createElement("option");
+          option.value = sign.key;
+          option.textContent = `${sign.glyph} ${sign.name}`;
+          fragment.appendChild(option);
+        });
+        select.replaceChildren(fragment);
+      });
+
+      els.pairSignA.value = state.pairA;
+      els.pairSignB.value = state.pairB;
+    }
+
+    function syncPairGenders() {
+      [els.pairGenderA, els.pairGenderB].forEach((group) => {
+        const selected = group === els.pairGenderA ? state.pairGenderA : state.pairGenderB;
+        group.querySelectorAll("[data-gender]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.gender === selected));
+        });
+      });
+    }
+
+    function makePairBadge(text) {
+      const badge = document.createElement("span");
+      badge.className = "pair-badge";
+      badge.textContent = text;
+      return badge;
+    }
+
+    function buildPairDims(dims) {
+      return dims.map((dim) => {
+        const row = document.createElement("div");
+        row.className = "pair-dim";
+
+        const head = document.createElement("div");
+        head.className = "pair-dim-head";
+
+        const label = document.createElement("span");
+        label.className = "pair-dim-label";
+        label.textContent = dim.label;
+
+        const value = document.createElement("span");
+        value.className = "pair-dim-value";
+        value.textContent = "0";
+
+        head.append(label, value);
+
+        const track = document.createElement("div");
+        track.className = "pair-dim-track";
+        track.setAttribute("aria-hidden", "true");
+
+        const fill = document.createElement("i");
+        fill.className = "pair-dim-fill";
+        track.appendChild(fill);
+
+        row.append(head, track);
+        return row;
+      });
+    }
+
+    function buildPairBest(matches, currentKey) {
+      return matches.map(({ sign, result }) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `pair-best-card${sign.key === currentKey ? " active" : ""}`;
+        button.dataset.bestSign = sign.key;
+        button.style.setProperty("--sign-color", sign.color);
+        button.setAttribute("aria-pressed", String(sign.key === currentKey));
+        button.setAttribute("aria-label", `把主角 B 换成${sign.name}，契合度 ${result.score} 分`);
+
+        const glyph = document.createElement("span");
+        glyph.className = "pair-best-glyph";
+        glyph.setAttribute("aria-hidden", "true");
+        glyph.textContent = sign.glyph;
+
+        const info = document.createElement("span");
+        info.className = "pair-best-info";
+        const name = document.createElement("strong");
+        name.textContent = sign.name;
+        const meta = document.createElement("small");
+        meta.textContent = `${sign.element} · ${result.aspect.name}`;
+        info.append(name, meta);
+
+        const score = document.createElement("span");
+        score.className = "pair-best-score";
+        score.textContent = String(result.score);
+
+        button.append(glyph, info, score);
+        return button;
+      });
+    }
+
+    function animatePairNumber(element, target, token, duration = 900) {
+      if (reduceMotionQuery.matches) {
+        element.textContent = String(target);
+        return;
+      }
+
+      const startedAt = performance.now();
+      function tick(now) {
+        if (token !== state.pairToken) {
+          return;
+        }
+
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = String(Math.round(target * eased));
+
+        if (progress < 1) {
+          window.requestAnimationFrame(tick);
+        } else {
+          element.textContent = String(target);
+        }
+      }
+
+      window.requestAnimationFrame(tick);
+    }
+
+    function zeroPairScores() {
+      state.pairToken += 1;
+      els.pairScore.textContent = "0";
+      els.pairDims.querySelectorAll(".pair-dim-value").forEach((node) => {
+        node.textContent = "0";
+      });
+      els.pairDims.querySelectorAll(".pair-dim-fill").forEach((node) => {
+        node.style.width = "0%";
+      });
+    }
+
+    function applyPairScores(data, animate = true) {
+      const token = state.pairToken + 1;
+      state.pairToken = token;
+      const values = [...els.pairDims.querySelectorAll(".pair-dim-value")];
+      const fills = [...els.pairDims.querySelectorAll(".pair-dim-fill")];
+
+      if (!animate || reduceMotionQuery.matches) {
+        els.pairScore.textContent = String(data.score);
+        values.forEach((node, index) => {
+          node.textContent = String(data.dims[index].value);
+        });
+        fills.forEach((node, index) => {
+          node.style.width = `${data.dims[index].value}%`;
+        });
+        return;
+      }
+
+      els.pairScore.textContent = "0";
+      values.forEach((node) => {
+        node.textContent = "0";
+      });
+      fills.forEach((node) => {
+        node.style.width = "0%";
+      });
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          if (token !== state.pairToken) {
+            return;
+          }
+
+          fills.forEach((node, index) => {
+            node.style.width = `${data.dims[index].value}%`;
+          });
+          animatePairNumber(els.pairScore, data.score, token);
+          values.forEach((node, index) => {
+            animatePairNumber(node, data.dims[index].value, token, 820);
+          });
+        });
+      });
+    }
+
+    function renderPairing({ initial = false } = {}) {
+      const a = SIGN_MAP.get(state.pairA) || SIGN_MAP.get("cancer");
+      const b = SIGN_MAP.get(state.pairB) || SIGN_MAP.get("scorpio");
+      state.pairA = a.key;
+      state.pairB = b.key;
+      if (!initial) {
+        state.pairPending = false;
+      }
+
+      const data = computePair(a.key, b.key);
+      const genderA = PAIR_GENDERS[state.pairGenderA] || PAIR_GENDERS.any;
+      const genderB = PAIR_GENDERS[state.pairGenderB] || PAIR_GENDERS.any;
+      const metaA = PAIR_SIGN_META[a.key];
+      const metaB = PAIR_SIGN_META[b.key];
+
+      els.pairCard.style.setProperty("--pair-a-color", a.color);
+      els.pairCard.style.setProperty("--pair-b-color", b.color);
+      els.pairPersonA.style.setProperty("--pair-sign-color", a.color);
+      els.pairPersonB.style.setProperty("--pair-sign-color", b.color);
+      els.pairSignA.value = a.key;
+      els.pairSignB.value = b.key;
+      syncPairGenders();
+
+      els.pairGlyphA.textContent = a.glyph;
+      els.pairGlyphB.textContent = b.glyph;
+      els.pairMetaA.textContent = `${a.element} · ${metaA.modality} · ${metaA.polarity}`;
+      els.pairMetaB.textContent = `${b.element} · ${metaB.modality} · ${metaB.polarity}`;
+      els.pairScorePair.textContent = `${a.name} × ${b.name}`;
+      els.pairScoreGender.textContent = `${genderA.label} × ${genderB.label}`;
+      els.pairWatermark.textContent = `${a.glyph} ${b.glyph}`;
+
+      els.pairVerdict.textContent = data.verdict.label;
+      els.pairSummary.textContent = a.key === b.key
+        ? `同为${a.name}，两个人都${PAIR_SIGN_NOTES[a.key]}；默契来自相似，盲点也来自相似。${data.verdict.summary}`
+        : `${genderA.pronoun}${PAIR_SIGN_NOTES[a.key]}；${genderB.pronoun}${PAIR_SIGN_NOTES[b.key]}。${data.verdict.summary}`;
+
+      const badges = [
+        `${a.element} × ${b.element}`,
+        data.aspect.name,
+        `${genderA.label} × ${genderB.label}`
+      ];
+      els.pairBadges.replaceChildren(...badges.map(makePairBadge));
+
+      els.pairDims.replaceChildren(...buildPairDims(data.dims));
+      const pairSubject = a.key === b.key ? `同为${a.name}，你们` : `${a.name}和${b.name}`;
+      els.pairStrength.textContent = `${pairSubject}在「${data.topDim.label}」上最合拍。${PAIR_DIMENSION_COPY[data.topDim.key].strength}`;
+      els.pairFriction.textContent = `相对薄弱的是「${data.lowDim.label}」。${PAIR_DIMENSION_COPY[data.lowDim.key].friction}`;
+      els.pairAdvice.textContent = `${PAIR_DIMENSION_COPY[data.lowDim.key].advice}${pairAspectAdvice(data.aspect)}`;
+
+      els.pairBestLabel.textContent = `为${a.name}挑的高分搭档`;
+      els.pairBest.replaceChildren(...buildPairBest(pairBestMatches(a.key), b.key));
+      els.pairLive.textContent = `${a.name}与${b.name}，契合度 ${data.score} 分，${data.verdict.label}。`;
+
+      if (initial) {
+        if (reduceMotionQuery.matches) {
+          applyPairScores(data, false);
+        } else {
+          zeroPairScores();
+          state.pairPending = true;
+        }
+        return;
+      }
+
+      applyPairScores(data, true);
+    }
+
+    function observePairCard() {
+      if (!("IntersectionObserver" in window)) {
+        renderPairing();
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) {
+          return;
+        }
+
+        observer.disconnect();
+        if (state.pairPending) {
+          renderPairing();
+        }
+      }, { threshold: 0.16 });
+
+      observer.observe(els.pairCard);
     }
 
     function activeTopic() {
@@ -2865,6 +4365,52 @@
       renderChart(topic, buildRanking(topic));
     });
 
+    els.pairSignA.addEventListener("change", () => {
+      if (!SIGN_MAP.has(els.pairSignA.value)) {
+        return;
+      }
+      state.pairA = els.pairSignA.value;
+      renderPairing();
+    });
+
+    els.pairSignB.addEventListener("change", () => {
+      if (!SIGN_MAP.has(els.pairSignB.value)) {
+        return;
+      }
+      state.pairB = els.pairSignB.value;
+      renderPairing();
+    });
+
+    els.pairGenderA.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-gender]");
+      if (!button || !PAIR_GENDERS[button.dataset.gender]) {
+        return;
+      }
+      state.pairGenderA = button.dataset.gender;
+      renderPairing();
+    });
+
+    els.pairGenderB.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-gender]");
+      if (!button || !PAIR_GENDERS[button.dataset.gender]) {
+        return;
+      }
+      state.pairGenderB = button.dataset.gender;
+      renderPairing();
+    });
+
+    els.pairBest.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-best-sign]");
+      if (!button || !SIGN_MAP.has(button.dataset.bestSign)) {
+        return;
+      }
+      state.pairB = button.dataset.bestSign;
+      renderPairing();
+    });
+
+    populatePairSelects();
+    renderPairing({ initial: true });
+    observePairCard();
     renderGroupBar();
     renderTopicBar();
     renderView();
