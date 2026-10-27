@@ -3430,32 +3430,143 @@
       11: { name: "相邻", spark: 1, ease: 2, bond: 1 }
     };
 
-    const PAIR_DIMENSION_COPY = {
-      spark: {
-        strength: "两个人都愿意为关系制造心跳，浪漫、审美与仪式感很容易互相点燃。",
-        friction: "心动的表达频率不太一致：有人需要热烈回应，有人把喜欢藏进日常。",
-        advice: "把欣赏及时说出口，也把约会和惊喜做成双方都舒服的频率。"
-      },
-      emotional: {
-        strength: "情绪温度接近，低落时更容易先被接住，而不是被急着讲道理。",
-        friction: "两个人都需要安全感，却可能用沉默、试探或吃醋来确认在意。",
-        advice: "先回应感受，再讨论事情；不安时直接说出需要，少让对方猜。"
-      },
-      communication: {
-        strength: "聊天与表达容易对上频道，分歧也更有机会被摊开说清楚。",
-        friction: "表达和回应的节奏不同，容易把「没及时说」误读成「不在意」。",
-        advice: "约定重要话题的沟通方式与回复预期，别用冷战代替表达。"
-      },
-      daily: {
-        strength: "日常节奏与生活审美接近，吃饭、收纳和仪式感都容易过到一块儿。",
-        friction: "一个想宅家，一个想出门；或对金钱与秩序的习惯不同，小事容易积累。",
-        advice: "把家务、消费和独处时间提前说清楚，用可执行的约定代替默契假设。"
-      },
-      stability: {
-        strength: "对承诺与长期规划的态度接近，遇到现实问题更愿意一起扛。",
-        friction: "两个人都坚持自己的方式，冲突时容易比谁更能撑，长期问题被拖延。",
-        advice: "把边界、金钱与未来计划放到桌面上；稳定来自可预期的行动。"
-      }
+    const PAIR_DIMENSION_STRENGTH_TOPICS = {
+      spark: ["first-sight", "coquettish", "ritual", "surprise", "love-brain", "photo"],
+      emotional: ["comfort", "care", "marriage", "love-brain"],
+      communication: ["honesty", "social", "awkward", "freedom"],
+      daily: ["homebody", "ritual", "cooking", "organize", "saving", "enjoy-life"],
+      stability: ["marriage", "finance", "ambition", "saving"]
+    };
+
+    const PAIR_DIMENSION_FRICTION_TOPICS = {
+      spark: ["first-sight", "coquettish", "ritual", "surprise", "photo", "love-brain"],
+      emotional: ["jealousy", "comfort", "care", "marriage", "cold-war"],
+      communication: ["honesty", "social", "awkward", "slow-reply", "freedom"],
+      daily: ["homebody", "ritual", "cooking", "organize", "saving", "impulse-buy", "enjoy-life"],
+      stability: ["cold-war", "stubborn", "marriage", "finance", "ambition"]
+    };
+
+    const PAIR_TOPIC_LABELS = {
+      "first-sight": "一见钟情",
+      coquettish: "撒娇",
+      ritual: "仪式感",
+      surprise: "制造惊喜",
+      photo: "拍照审美",
+      "love-brain": "恋爱浓度",
+      comfort: "安慰能力",
+      care: "照顾",
+      marriage: "承诺观",
+      jealousy: "占有欲",
+      "cold-war": "冷战倾向",
+      honesty: "坦率度",
+      social: "社交能量",
+      awkward: "圆场能力",
+      "slow-reply": "回消息节奏",
+      freedom: "自由需求",
+      homebody: "居家偏好",
+      cooking: "下厨热情",
+      organize: "秩序感",
+      saving: "储蓄观",
+      "impulse-buy": "消费冲动",
+      "enjoy-life": "享受生活",
+      finance: "理财观",
+      ambition: "事业节奏",
+      stubborn: "坚持度"
+    };
+
+    const PAIR_SHARED_TOPIC_PHRASES = {
+      "first-sight": "容易被第一眼的火花带动，心动常常比理性先到",
+      coquettish: "不吝啬示弱和撒娇，互动里总能找到柔软的台阶",
+      ritual: "愿意为日常加一点仪式感，让普通日子也有记忆点",
+      surprise: "舍得为对方花心思制造惊喜，把在意做成具体的小事",
+      "love-brain": "愿意把注意力和时间留给关系，恋爱浓度不算低",
+      photo: "对审美与记录生活有相近的偏好，出片和氛围感容易同步",
+      comfort: "擅长先接住情绪，而不是急着讲道理",
+      care: "习惯用实际照顾表达在意，把关心落到细节里",
+      marriage: "看重承诺，愿意把关系放进长期计划",
+      honesty: "重视坦率，很多话不需要反复猜",
+      social: "能在人群里找到自己的位置，带彼此出门不会太费力",
+      awkward: "懂得给彼此台阶，尴尬很容易被轻轻带过",
+      freedom: "珍惜个人空间，不太需要用黏连证明爱",
+      homebody: "愿意把时间留给家，熟悉的角落就能充电",
+      cooking: "对吃饭和下厨有相近的热情，日常很容易落到烟火气里",
+      organize: "对秩序和收纳的接受度接近，生活里的小摩擦会少一些",
+      saving: "对储蓄和消费的安全边界有相近理解",
+      "enjoy-life": "懂得享受日常，一顿好饭或一次散步就能回血",
+      finance: "对金钱、风险和长期规划的看法比较接近",
+      ambition: "对事业投入的节奏接近，不太会互相拖后腿"
+    };
+
+    const PAIR_CONTRAST_PHRASES = {
+      "first-sight": "{high}更容易迅速心动，{low}需要更长的观察期，节奏一快一慢",
+      coquettish: "{high}更会用撒娇和示弱拉近距离，{low}更习惯直接表达",
+      ritual: "{high}更在意纪念日和小仪式，{low}觉得心意到了就够",
+      surprise: "{high}喜欢制造惊喜，{low}更习惯把心意放在日常",
+      photo: "{high}对审美和记录更敏感，{low}更在意当下的体验",
+      "love-brain": "{high}更容易把注意力全放在关系上，{low}更需要保留自我空间",
+      jealousy: "{high}更需要确认和边界，{low}容易觉得被管得太多",
+      comfort: "{high}更擅长接住情绪，{low}更习惯先给解决方案",
+      care: "{high}会把照顾落到细节，{low}有时需要更明确的回应",
+      marriage: "{high}对承诺的期待更高，{low}更愿意顺其自然",
+      "cold-war": "{high}更能忍住不先开口，{low}更希望当场把话说清",
+      honesty: "{high}习惯直说，{low}更会绕开正面冲突",
+      social: "{high}把聚会当作充电，{low}更想早点回到自己的空间",
+      awkward: "{high}擅长当场圆场，{low}可能需要一点缓冲时间",
+      "slow-reply": "{high}回消息更随性，{low}更容易被已读不回影响心情",
+      freedom: "{high}需要更大的个人空间，{low}更希望关系里有高频连接",
+      homebody: "{high}更想把周末留给家，{low}更想临时出门",
+      cooking: "{high}更愿意下厨折腾，{low}更在意吃完之后的轻松",
+      organize: "{high}对秩序更敏感，{low}更能接受随性一点",
+      saving: "{high}更看重账户里的安全垫，{low}更愿意为当下花钱",
+      "impulse-buy": "{high}更容易为当下心动买单，{low}更愿意先算一算",
+      "enjoy-life": "{high}更主动安排享受，{low}更容易把休息排到后面",
+      finance: "{high}更关注长期财务规划，{low}更愿意走一步看一步",
+      ambition: "{high}的事业节奏更紧，{low}更看重生活与工作的平衡",
+      stubborn: "{high}更坚持自己的方式，{low}更愿意妥协"
+    };
+
+    const PAIR_SHARED_WEAK_PHRASES = {
+      jealousy: "两个人都需要确认感，小事容易被放大",
+      "cold-war": "两个人都习惯把情绪先收起来，沉默容易拖成冷战",
+      "slow-reply": "两个人对回复速度都不太着急，重要的事容易被耽搁",
+      "impulse-buy": "两个人都容易为当下心动买单，预算需要有人踩刹车",
+      stubborn: "两个人都很有自己的主意，谁先松口都不容易"
+    };
+
+    const PAIR_TOPIC_ADVICE = {
+      "first-sight": "心动快的人慢一点确认，心动慢的人也把观察期说清楚。",
+      coquettish: "把撒娇当调味，不要当唯一的沟通方式；直接说需求会更稳。",
+      ritual: "把纪念日和小仪式说成具体期待，别让「懂不懂我」代替沟通。",
+      surprise: "交换彼此的惊喜偏好，有人爱大场面，有人只想安静吃顿饭。",
+      photo: "拍照前确认对方是享受记录还是只想参与，别把审美差变成否定。",
+      "love-brain": "保留各自的社交和爱好，让关系占生活的一部分，而不是全部。",
+      comfort: "先问对方要倾听还是建议，两种陪伴都有效。",
+      care: "照顾之前问一句需不需要，别把「为你好」变成替对方做决定。",
+      marriage: "把承诺拆成可执行的小事：时间、金钱、家人和未来计划。",
+      jealousy: "约定边界与报备方式，让安全感来自透明，而不是试探。",
+      "cold-war": "设一个冷静时限，谁先恢复就先开口，别让沉默变成输赢。",
+      honesty: "直说时加一点缓冲，绕弯时给一句明确结论。",
+      social: "聚会和独处都要留额度，不必每次社交都绑定彼此。",
+      awkward: "尴尬发生时先接住气氛，再私下说清真实感受。",
+      "slow-reply": "约定重要消息的响应方式，给忙碌留说明，不把速度等同在乎。",
+      freedom: "把自由和陪伴都写进约定，主动报备比被动追问更让人安心。",
+      homebody: "把「一起出门」和「各宅各的」都排进周末，别把陪伴等同同一种过法。",
+      cooking: "谁下厨谁决定菜单，另一个人负责收拾，别让付出变成计分。",
+      organize: "公共空间设最低秩序标准，私人空间各自做主。",
+      saving: "设一个共同预算和各自的自由额度，钱的分歧就不会变成价值判断。",
+      "impulse-buy": "大额消费设一个冷静期，小确幸留预算，不用完全压抑。",
+      "enjoy-life": "把休息写进日程，别等有空才享受生活。",
+      finance: "定期做一次财务对话：收入、支出、目标和风险偏好。",
+      ambition: "把事业高峰和关系需求提前排期，忙的时候也要给确定性。",
+      stubborn: "争执时先复述对方观点，再表达自己的立场，别急着赢。"
+    };
+
+    const PAIR_DIMENSION_ADVICE = {
+      spark: "把欣赏说出口，也把约会和惊喜做成双方都舒服的频率。",
+      emotional: "先回应感受，再讨论事情；不安时直接说出需要。",
+      communication: "约定重要话题的沟通方式与回复预期，别用冷战代替表达。",
+      daily: "把家务、消费和独处时间写成具体约定，用行动替代默契假设。",
+      stability: "把边界、金钱与未来计划放到桌面上，稳定来自可预期的行动。"
     };
 
     const PAIR_VERDICTS = [
@@ -3609,17 +3720,108 @@
       return PAIR_VERDICTS.find((verdict) => score >= verdict.min) || PAIR_VERDICTS[PAIR_VERDICTS.length - 1];
     }
 
-    function pairAspectAdvice(aspect) {
+    function pairTopicStats(aKey, bKey, topicId) {
+      const left = pairAffinity(aKey, topicId);
+      const right = pairAffinity(bKey, topicId);
+      return {
+        topicId,
+        label: PAIR_TOPIC_LABELS[topicId] || TOPIC_MAP.get(topicId)?.topic.tab || topicId,
+        left,
+        right,
+        min: Math.min(left, right),
+        avg: (left + right) / 2,
+        diff: Math.abs(left - right)
+      };
+    }
+
+    function pickPairStrengthTopic(aKey, bKey, dimensionKey) {
+      const topicIds = PAIR_DIMENSION_STRENGTH_TOPICS[dimensionKey] || [];
+      const candidates = topicIds.map((topicId) => {
+        const candidate = pairTopicStats(aKey, bKey, topicId);
+        candidate.strengthScore = candidate.min * 0.6
+          + candidate.avg * 0.25
+          + pairSimilarity(candidate.left, candidate.right) * 0.15;
+        return candidate;
+      });
+
+      candidates.sort((left, right) => right.strengthScore - left.strengthScore);
+      return candidates[0] || null;
+    }
+
+    function pickPairFrictionTopic(aKey, bKey, dimensionKey) {
+      const topicIds = PAIR_DIMENSION_FRICTION_TOPICS[dimensionKey] || [];
+      const candidates = topicIds.map((topicId) => pairTopicStats(aKey, bKey, topicId));
+      const maxDiff = candidates.reduce((max, candidate) => Math.max(max, candidate.diff), 0);
+
+      if (maxDiff >= 0.12) {
+        const contrast = [...candidates].sort((left, right) => right.diff - left.diff)[0];
+        const aWins = contrast.left >= contrast.right;
+        return {
+          ...contrast,
+          shared: false,
+          highKey: aWins ? aKey : bKey,
+          lowKey: aWins ? bKey : aKey
+        };
+      }
+
+      const sharedCandidates = candidates
+        .filter((candidate) => PAIR_SHARED_WEAK_PHRASES[candidate.topicId])
+        .sort((left, right) => right.min - left.min);
+
+      if (sharedCandidates.length && sharedCandidates[0].min >= 0.58) {
+        return { ...sharedCandidates[0], shared: true };
+      }
+
+      return null;
+    }
+
+    function fillPairCopy(template, highKey, lowKey) {
+      const high = SIGN_MAP.get(highKey);
+      const low = SIGN_MAP.get(lowKey);
+      return template
+        .replaceAll("{high}", high ? high.name : "")
+        .replaceAll("{low}", low ? low.name : "");
+    }
+
+    function pairAspectStrengthTail(aspect) {
+      if (aspect.distance === 0) {
+        return "同座的熟悉感让默契来得很快。";
+      }
+      if (aspect.ease >= 3) {
+        return `再加上${aspect.name}的友好相位，这种顺流感会更明显。`;
+      }
+      if (aspect.ease <= -3) {
+        return `即使${aspect.name}带来拉扯，这一块仍是你们的缓冲垫。`;
+      }
+      return "它不一定最抢眼，却能在日常里持续供能。";
+    }
+
+    function pairAspectFrictionTail(aspect) {
+      if (aspect.distance === 0) {
+        return "同座会把这种模式放大，因为你们都太熟悉这套反应。";
+      }
+      if (aspect.ease <= -3) {
+        return `${aspect.name}又放大了这种拉扯，争执时容易把「不同」听成「不在乎」。`;
+      }
+      if (aspect.ease >= 3) {
+        return `好在${aspect.name}让分歧更容易被说开。`;
+      }
+      return "它不算致命，但会在重复的小场景里慢慢累积。";
+    }
+
+    function pairAspectAdvice(aspect, a, b) {
       if (aspect.distance === 0) {
         return "同座组合容易默认「你懂我」，重要需求仍要说出口。";
       }
       if (aspect.ease >= 3) {
-        return "你们的相位天然友好，别因为顺利就省略确认与表达。";
+        return `你们的${aspect.name}天然友好，别因为顺利就省略确认与表达。`;
       }
       if (aspect.ease <= -3) {
-        return "这段关系自带拉扯感，冲突时先安顿情绪，再讨论对错。";
+        return `${aspect.name}带来拉扯，冲突时先安顿情绪，再讨论对错。`;
       }
-      return "把握差异带来的新鲜感，也别忘了定期对齐彼此的生活节奏。";
+      return a.element === b.element
+        ? `同为${a.element}，容易把相似当成默契，盲点也来自相似。`
+        : `${a.element}与${b.element}节奏不同，先翻译彼此的需求，再下结论。`;
     }
 
     function computePair(aKey, bKey) {
@@ -4093,9 +4295,45 @@
 
       els.pairDims.replaceChildren(...buildPairDims(data.dims));
       const pairSubject = a.key === b.key ? `同为${a.name}，你们` : `${a.name}和${b.name}`;
-      els.pairStrength.textContent = `${pairSubject}在「${data.topDim.label}」上最合拍。${PAIR_DIMENSION_COPY[data.topDim.key].strength}`;
-      els.pairFriction.textContent = `相对薄弱的是「${data.lowDim.label}」。${PAIR_DIMENSION_COPY[data.lowDim.key].friction}`;
-      els.pairAdvice.textContent = `${PAIR_DIMENSION_COPY[data.lowDim.key].advice}${pairAspectAdvice(data.aspect)}`;
+      const strengthTopic = pickPairStrengthTopic(a.key, b.key, data.topDim.key);
+      const strengthPhrase = strengthTopic
+        ? PAIR_SHARED_TOPIC_PHRASES[strengthTopic.topicId] || "愿意把心思放进关系里"
+        : "";
+      const strengthDetail = strengthTopic
+        ? `在「${strengthTopic.label}」上，两个人都${strengthPhrase}。`
+        : `两个人都愿意在「${data.topDim.label}」上互相配合。`;
+      const strengthLead = data.topDim.value >= 75
+        ? `${pairSubject}最合拍的维度是「${data.topDim.label}」（${data.topDim.value}分）`
+        : `${pairSubject}相对最能互相接住的是「${data.topDim.label}」（${data.topDim.value}分）`;
+      els.pairStrength.textContent = `${strengthLead}：${strengthDetail}${pairAspectStrengthTail(data.aspect)}`;
+
+      const frictionTopic = pickPairFrictionTopic(a.key, b.key, data.lowDim.key);
+      let frictionDetail = "";
+      if (frictionTopic?.shared) {
+        frictionDetail = `一个共同盲点：${PAIR_SHARED_WEAK_PHRASES[frictionTopic.topicId]}。`;
+      } else if (frictionTopic) {
+        const contrastTemplate = PAIR_CONTRAST_PHRASES[frictionTopic.topicId];
+        const contrastSentence = contrastTemplate
+          ? fillPairCopy(contrastTemplate, frictionTopic.highKey, frictionTopic.lowKey)
+          : `${SIGN_MAP.get(frictionTopic.highKey).name}在这一项上更突出，${SIGN_MAP.get(frictionTopic.lowKey).name}则更靠后`;
+        frictionDetail = `两人在「${frictionTopic.label}」上的差异最明显：${contrastSentence}。`;
+      } else if (a.key === b.key) {
+        frictionDetail = "太像的两个人容易默认对方懂自己，盲点也来自相似。";
+      } else if (a.element === b.element) {
+        frictionDetail = `同为${a.element}，你们容易把相似当成默契，盲点也来自相似。`;
+      } else {
+        frictionDetail = `${a.element}与${b.element}的节奏不同，处理同一件事的优先级容易错位。`;
+      }
+      const frictionTail = a.key === b.key && !frictionTopic ? "" : pairAspectFrictionTail(data.aspect);
+      els.pairFriction.textContent = `相对薄弱的是「${data.lowDim.label}」（${data.lowDim.value}分）。${frictionDetail}${frictionTail}`;
+
+      const adviceTopicId = frictionTopic ? frictionTopic.topicId : null;
+      const adviceText = (adviceTopicId && PAIR_TOPIC_ADVICE[adviceTopicId])
+        || PAIR_DIMENSION_ADVICE[data.lowDim.key];
+      const audience = genderA.pronoun === genderB.pronoun
+        ? `${genderA.pronoun}们`
+        : `${genderA.pronoun}和${genderB.pronoun}`;
+      els.pairAdvice.textContent = `对${audience}来说，${adviceText}${pairAspectAdvice(data.aspect, a, b)}`;
 
       els.pairBestLabel.textContent = `为${a.name}挑的高分搭档`;
       els.pairBest.replaceChildren(...buildPairBest(pairBestMatches(a.key), b.key));
